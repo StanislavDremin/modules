@@ -28,7 +28,7 @@ class ComponentCreator
 	 *
 	 * @return array|null
 	 */
-	public function getNamespaceList($data = [])
+	public function getNamespaceListAction($data = [])
 	{
 		$folder = $data['folder'];
 
@@ -50,7 +50,7 @@ class ComponentCreator
 		return array_values($result);
 	}
 
-	public function create($data = [])
+	public function createAction($data = [])
 	{
 
 		$mainFolder = $data['FOLDER'];

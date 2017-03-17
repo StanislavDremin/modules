@@ -29,8 +29,14 @@ class HLIBlockFieldWidget extends HelperWidget
     static protected $defaults = array(
         'USE_BX_API' => true
     );
+	protected static $ufCodeField = '';
 
-    /**
+	/**
+	 * HLIBlockFieldWidget constructor.
+	 * @param string $code
+	 */
+
+	/**
      * Генерирует HTML для редактирования поля
      *
      * @see \CAdminForm::ShowUserFieldsWithReadyData
@@ -154,7 +160,6 @@ class HLIBlockFieldWidget extends HelperWidget
 
                 $context = $this->helper->getContext();
                 $info = $this->getUserFieldInfo();
-
                 if (($context == AdminListHelper::OP_ADMIN_VARIABLES_FILTER OR $context == AdminListHelper::OP_CREATE_FILTER_FORM)
                     AND (isset($info['LIST_FILTER_LABEL']) AND !empty($info['LIST_FILTER_LABEL']))
                 ) {
@@ -197,7 +202,6 @@ class HLIBlockFieldWidget extends HelperWidget
     {
         $info = $this->getUserFieldInfo();
         if ($info) {
-
             /** @var \CAllUserTypeManager $USER_FIELD_MANAGER */
             global $USER_FIELD_MANAGER;
             $FIELD_NAME = $this->getCode();
@@ -209,7 +213,6 @@ class HLIBlockFieldWidget extends HelperWidget
                 $info['SETTINGS']['DEFAULT_VALUE'] = $_REQUEST['def_' . $FIELD_NAME];
             }
             $USER_FIELD_MANAGER->AddUserField($info, $data[$this->getCode()], $row);
-
         }
     }
 
@@ -239,6 +242,10 @@ class HLIBlockFieldWidget extends HelperWidget
     {
         $id = $this->getHLId();
         $fields = static::getUserFields($id, $this->data);
+
+//	    PR($fields);
+//	    PR($this->getCode());
+
         if (isset($fields[$this->getCode()])) {
             return $fields[$this->getCode()];
         }

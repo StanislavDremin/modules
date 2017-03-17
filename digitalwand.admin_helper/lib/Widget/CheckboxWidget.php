@@ -2,48 +2,46 @@
 
 namespace DigitalWand\AdminHelper\Widget;
 
-use Bitrix\Main\Entity;
 use Bitrix\Main\Localization\Loc;
-use PW\Tools\Debug;
 
 Loc::loadMessages(__FILE__);
 
 /**
- * Виджет "галочка"
+ * Р’РёРґР¶РµС‚ "РіР°Р»РѕС‡РєР°"
  */
 class CheckboxWidget extends HelperWidget
 {
     /**
-     * Строковый тип чекбокса (Y/N)
+     * РЎС‚СЂРѕРєРѕРІС‹Р№ С‚РёРї С‡РµРєР±РѕРєСЃР° (Y/N)
      */
     const TYPE_STRING = 'string';
     /**
-     * Целочисленный тип чекбокса (1/0)
+     * Р¦РµР»РѕС‡РёСЃР»РµРЅРЅС‹Р№ С‚РёРї С‡РµРєР±РѕРєСЃР° (1/0)
      */
     const TYPE_INT = 'integer';
     /**
-     * Булевый тип чекбокса
+     * Р‘СѓР»РµРІС‹Р№ С‚РёРї С‡РµРєР±РѕРєСЃР°
      */
     const TYPE_BOOLEAN = 'boolean';
     /**
-     * Значение положительного варианта для строкового чекбокса
+     * Р—РЅР°С‡РµРЅРёРµ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРіРѕ РІР°СЂРёР°РЅС‚Р° РґР»СЏ СЃС‚СЂРѕРєРѕРІРѕРіРѕ С‡РµРєР±РѕРєСЃР°
      */
     const TYPE_STRING_YES = 'Y';
     /**
-     * Значение отрицательного варианта для строкового чекбокса
+     * Р—РЅР°С‡РµРЅРёРµ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРіРѕ РІР°СЂРёР°РЅС‚Р° РґР»СЏ СЃС‚СЂРѕРєРѕРІРѕРіРѕ С‡РµРєР±РѕРєСЃР°
      */
     const TYPE_STRING_NO = 'N';
     /**
-     * Значение положительного варианта для целочисленного чекбокса
+     * Р—РЅР°С‡РµРЅРёРµ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРіРѕ РІР°СЂРёР°РЅС‚Р° РґР»СЏ С†РµР»РѕС‡РёСЃР»РµРЅРЅРѕРіРѕ С‡РµРєР±РѕРєСЃР°
      */
     const TYPE_INT_YES = 1;
     /**
-     * Значение отрицательного варианта для целочисленного чекбокса
+     * Р—РЅР°С‡РµРЅРёРµ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРіРѕ РІР°СЂРёР°РЅС‚Р° РґР»СЏ С†РµР»РѕС‡РёСЃР»РµРЅРЅРѕРіРѕ С‡РµРєР±РѕРєСЃР°
      */
     const TYPE_INT_NO = 0;
 
     protected static $defaults = array(
-        'EDIT_IN_LIST' => true,
+        'EDIT_IN_LIST' => true
     );
 
     /**
@@ -194,26 +192,26 @@ class CheckboxWidget extends HelperWidget
     }
 
     /**
-     * Получить тип чекбокса по типу поля.
+     * РџРѕР»СѓС‡РёС‚СЊ С‚РёРї С‡РµРєР±РѕРєСЃР° РїРѕ С‚РёРїСѓ РїРѕР»СЏ.
      *
      * @return mixed
      */
     public function getCheckboxType()
     {
         $fieldType = '';
-	    /** @var Entity\DataManager $entity */
         $entity = $this->getEntityName();
         $entityMap = $entity::getMap();
         $columnName = $this->getCode();
 
-        if ($entity::getEntity()->hasField($columnName)) {
-        	/** @var Entity\Field $field */
-	        foreach ($entityMap as $field) {
-                if ($field->getName() === $columnName) {
+        if (!isset($entityMap[$columnName])) {
+            foreach ($entityMap as $field) {
+                if ($field->getColumnName() === $columnName) {
                     $fieldType = $field->getDataType();
                     break;
                 }
             }
+        } else {
+            $fieldType = $entityMap[$columnName]['data_type'];
         }
 
         return $fieldType;

@@ -10,18 +10,17 @@ import { connect, Provider } from "react-redux";
 import Store from "./Store";
 import { mapDispatchToProps, mapStateToProps } from "./Controller";
 import cn from "classnames";
-import { Field, Form } from "EsdForm";
+import { Field, Form } from "UIForm";
 import Preloader from 'preloader/Preloader';
 
 class Creator extends React.Component {
 	constructor(props) {
 		super(props);
 
-
 	}
 
 	render() {
-		// console.info(this.props);
+		console.info(this.props);
 		let leftCol = 3, rightCol = 9,
 			smLeftCol = 'col-sm-' + leftCol,
 			smRightCol = 'col-sm-' + rightCol,

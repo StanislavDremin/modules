@@ -26,6 +26,8 @@ namespace DigitalWand\AdminHelper\Helper;
  */
 abstract class AdminInterface
 {
+	public static $titlePage = '';
+
 	/**
 	 * Список зарегистрированных интерфейсов
 	 * @var string
@@ -167,9 +169,7 @@ abstract class AdminInterface
 		/**
 		 * @var \Bitrix\Main\Entity\DataManager
 		 */
-
 		$model = $helperClasses[0]::getModel();
-
 		foreach ($tabsWithFields as $tabCode => $tab) {
 			$fieldsAndTabs['TABS'][$tabCode] = $tab['NAME'];
 
@@ -208,10 +208,6 @@ abstract class AdminInterface
 				$adminInterfaceClass::register();
 			}
 		}
-	}
-
-	public static function titlePage()
-	{
 
 	}
 }

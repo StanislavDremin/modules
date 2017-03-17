@@ -9,17 +9,17 @@ use DigitalWand\AdminHelper\Helper\AdminBaseHelper;
 Loc::loadMessages(__FILE__);
 
 /**
- * Виджет выбора записей из ORM.
+ * Р’РёРґР¶РµС‚ РІС‹Р±РѕСЂР° Р·Р°РїРёСЃРµР№ РёР· ORM.
  *
- * Настройки:
- * - `HELPER` — (string) класс хелпера, из которого будет производиться поиск записией. Должен быть
- * наследником `\DigitalWand\AdminHelper\Helper\AdminBaseHelper`.
- * - `ADDITIONAL_URL_PARAMS` — (array) дополнительные параметры для URL с попапом выбора записи.
- * - `TEMPLATE` — (string) шаблон отображения виджета, может принимать значения select и radio, по-умолчанию — select.
- * - `INPUT_SIZE` — (int) значение атрибута size для input.
- * - `WINDOW_WIDTH` — (int) значение width для всплывающего окна выбора элемента.
- * - `WINDOW_HEIGHT` — (int) значение height для всплывающего окна выбора элемента.
- * - `TITLE_FIELD_NAME` — (string) название поля, из которого выводить имя элемента.
+ * РќР°СЃС‚СЂРѕР№РєРё:
+ * - `HELPER` вЂ” (string) РєР»Р°СЃСЃ С…РµР»РїРµСЂР°, РёР· РєРѕС‚РѕСЂРѕРіРѕ Р±СѓРґРµС‚ РїСЂРѕРёР·РІРѕРґРёС‚СЊСЃСЏ РїРѕРёСЃРє Р·Р°РїРёСЃРёРµР№. Р”РѕР»Р¶РµРЅ Р±С‹С‚СЊ
+ * РЅР°СЃР»РµРґРЅРёРєРѕРј `\DigitalWand\AdminHelper\Helper\AdminBaseHelper`.
+ * - `ADDITIONAL_URL_PARAMS` вЂ” (array) РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РґР»СЏ URL СЃ РїРѕРїР°РїРѕРј РІС‹Р±РѕСЂР° Р·Р°РїРёСЃРё.
+ * - `TEMPLATE` вЂ” (string) С€Р°Р±Р»РѕРЅ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РІРёРґР¶РµС‚Р°, РјРѕР¶РµС‚ РїСЂРёРЅРёРјР°С‚СЊ Р·РЅР°С‡РµРЅРёСЏ select Рё radio, РїРѕ-СѓРјРѕР»С‡Р°РЅРёСЋ вЂ” select.
+ * - `INPUT_SIZE` вЂ” (int) Р·РЅР°С‡РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р° size РґР»СЏ input.
+ * - `WINDOW_WIDTH` вЂ” (int) Р·РЅР°С‡РµРЅРёРµ width РґР»СЏ РІСЃРїР»С‹РІР°СЋС‰РµРіРѕ РѕРєРЅР° РІС‹Р±РѕСЂР° СЌР»РµРјРµРЅС‚Р°.
+ * - `WINDOW_HEIGHT` вЂ” (int) Р·РЅР°С‡РµРЅРёРµ height РґР»СЏ РІСЃРїР»С‹РІР°СЋС‰РµРіРѕ РѕРєРЅР° РІС‹Р±РѕСЂР° СЌР»РµРјРµРЅС‚Р°.
+ * - `TITLE_FIELD_NAME` вЂ” (string) РЅР°Р·РІР°РЅРёРµ РїРѕР»СЏ, РёР· РєРѕС‚РѕСЂРѕРіРѕ РІС‹РІРѕРґРёС‚СЊ РёРјСЏ СЌР»РµРјРµРЅС‚Р°.
  *
  * @author Nik Samokhvalov <nik@samokhvalov.info>
  */
@@ -70,7 +70,7 @@ class OrmElementWidget extends NumberWidget
     }
 
     /**
-     * Генерирует HTML с выбором элемента во вcплывающем окне, шаблон select.
+     * Р“РµРЅРµСЂРёСЂСѓРµС‚ HTML СЃ РІС‹Р±РѕСЂРѕРј СЌР»РµРјРµРЅС‚Р° РІРѕ РІcРїР»С‹РІР°СЋС‰РµРј РѕРєРЅРµ, С€Р°Р±Р»РѕРЅ select.
      *
      * @return string
      */
@@ -121,7 +121,7 @@ class OrmElementWidget extends NumberWidget
     }
 
     /**
-     * Генерирует HTML с выбором элемента в виде радио инпутов.
+     * Р“РµРЅРµСЂРёСЂСѓРµС‚ HTML СЃ РІС‹Р±РѕСЂРѕРј СЌР»РµРјРµРЅС‚Р° РІ РІРёРґРµ СЂР°РґРёРѕ РёРЅРїСѓС‚РѕРІ.
      *
      * @return string
      */
@@ -136,7 +136,7 @@ class OrmElementWidget extends NumberWidget
                 $return .= InputType("radio", $this->getEditInputName(), $element['ID'], $this->getValue(), false, $element['TITLE']);
             }
         } else {
-            $return = 'Элементы не найдены';
+            $return = 'Р­Р»РµРјРµРЅС‚С‹ РЅРµ РЅР°Р№РґРµРЅС‹';
         }
 
         return $return;
@@ -321,7 +321,7 @@ class OrmElementWidget extends NumberWidget
     }
 
     /**
-     * Получает информацию о записях, к которым осуществлена привязка.
+     * РџРѕР»СѓС‡Р°РµС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ Р·Р°РїРёСЃСЏС…, Рє РєРѕС‚РѕСЂС‹Рј РѕСЃСѓС‰РµСЃС‚РІР»РµРЅР° РїСЂРёРІСЏР·РєР°.
      *
      * @return array
      * @throws \Bitrix\Main\ArgumentException
@@ -383,7 +383,7 @@ class OrmElementWidget extends NumberWidget
     }
 
     /**
-     * Получает информацию о всех активных элементах для их выбора в виджете.
+     * РџРѕР»СѓС‡Р°РµС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РІСЃРµС… Р°РєС‚РёРІРЅС‹С… СЌР»РµРјРµРЅС‚Р°С… РґР»СЏ РёС… РІС‹Р±РѕСЂР° РІ РІРёРґР¶РµС‚Рµ.
      *
      * @return array
      *
@@ -412,7 +412,7 @@ class OrmElementWidget extends NumberWidget
     }
 
     /**
-     * Возвращает связанную модель.
+     * Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃРІСЏР·Р°РЅРЅСѓСЋ РјРѕРґРµР»СЊ.
      *
      * @return \Bitrix\Main\Entity\DataManager
      */

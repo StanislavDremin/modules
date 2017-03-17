@@ -5,12 +5,12 @@ namespace DigitalWand\AdminHelper\Widget;
 use Bitrix\Main\UserTable;
 
 /**
- * Виджет для вывода пользователя.
+ * Р’РёРґР¶РµС‚ РґР»СЏ РІС‹РІРѕРґР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.
  *
- * Доступные опции:
+ * Р”РѕСЃС‚СѓРїРЅС‹Рµ РѕРїС†РёРё:
  * <ul>
- * <li> STYLE - inline-стили
- * <li> SIZE - значение атрибута size для input
+ * <li> STYLE - inline-СЃС‚РёР»Рё
+ * <li> SIZE - Р·РЅР°С‡РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р° size РґР»СЏ input
  * </ul>
  *
  * @author Nik Samokhvalov <nik@samokhvalov.info>
@@ -25,37 +25,23 @@ class UserWidget extends NumberWidget
         $style = $this->getSettings('STYLE');
         $size = $this->getSettings('SIZE');
 
-        $userId = (int)$this->getValue();
+        $userId = $this->getValue();
 
-	    /*$htmlUser = '';
+        $htmlUser = '';
 
-		 if (!empty($userId) && $userId != 0) {
-			 $rsUser = UserTable::getById($userId);
-			 $user = $rsUser->fetch();
+        if (!empty($userId) && $userId != 0) {
+            $rsUser = UserTable::getById($userId);
+            $user = $rsUser->fetch();
 
-			 $htmlUser = '[<a href="user_edit.php?lang=ru&ID=' . $user['ID'] . '">' . $user['ID'] . '</a>] ('
-				 . $user['EMAIL'] . ') ' . $user['NAME'] . '&nbsp;' . $user['LAST_NAME'];
-		 }
+            $htmlUser = '[<a href="user_edit.php?lang=ru&ID=' . $user['ID'] . '">' . $user['ID'] . '</a>] ('
+                . $user['EMAIL'] . ') ' . $user['NAME'] . '&nbsp;' . $user['LAST_NAME'];
+        }
 
-		 return '<input type="text"
-						name="' . $this->getEditInputName() . '"
-						value="' . static::prepareToTagAttr($this->getValue()) . '"
-						size="' . $size . '"
-						style="' . $style . '"/>' . $htmlUser;*/
-	    $arUser = [];
-	    if($userId > 0){
-	    	$arUser = UserTable::getRow([
-	    		'select'=>['ID','LOGIN','EMAIL','NAME'],
-			    'filter' => ['=ID' => $userId]
-		    ]);
-	    }
-
-	    return \FindUserID(
-	    	'FIELDS['.$this->getCode().']',
-		    $userId,
-		    $arUser['LOGIN'],
-		    $this->getSettings('FORM_ID')
-	    );
+        return '<input type="text"
+                       name="' . $this->getEditInputName() . '"
+                       value="' . static::prepareToTagAttr($this->getValue()) . '"
+                       size="' . $size . '"
+                       style="' . $style . '"/>' . $htmlUser;
     }
 
     /**

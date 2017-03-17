@@ -53,6 +53,8 @@ abstract class AdminEditHelper extends AdminBaseHelper
 	 */
 	protected $tabControl;
 
+	public static $titlePage = '';
+
 	/**
 	 * Производится инициализация переменных, обработка запросов на редактирование
 	 *
@@ -100,7 +102,7 @@ abstract class AdminEditHelper extends AdminBaseHelper
 
 		parent::__construct($fields, $tabs);
 
-		$this->tabControl = new \CAdminForm(static::generateFormId(), $this->tabs);
+		$this->tabControl = new \CAdminForm(str_replace("\\", "", get_called_class()), $this->tabs);
 
 		if (isset($_REQUEST['apply']) OR isset($_REQUEST['save'])) {
 			$this->data = $_REQUEST['FIELDS'];
@@ -176,11 +178,6 @@ abstract class AdminEditHelper extends AdminBaseHelper
 		$this->setElementTitle();
 	}
 
-	public static function generateFormId()
-	{
-		return str_replace("\\", "", get_called_class());
-	}
-
 	/**
 	 * Возвращает верхнее меню страницы.
 	 * По-умолчанию две кнопки:
@@ -203,53 +200,53 @@ abstract class AdminEditHelper extends AdminBaseHelper
 	 */
 	protected function getMenu($showDeleteButton = true)
 	{
+		$menu = [];
 		$listHelper = static::getHelperClass(AdminListHelper::className());
-		if(!$listHelper){
-			return false;
-		}
-		$menu = array(
-			$this->getButton('RETURN_TO_LIST', array(
-				'LINK' => $listHelper::getUrl(array_merge($this->additionalUrlParams,
-					array('restore_query' => 'Y')
-				)),
-				'ICON' => 'btn_list',
-			))
-		);
+		if($listHelper){
+			$menu = array(
+				$this->getButton('RETURN_TO_LIST', array(
+					'LINK' => $listHelper::getUrl(array_merge($this->additionalUrlParams,
+						array('restore_query' => 'Y')
+					)),
+					'ICON' => 'btn_list',
+				))
+			);
 
-		$arSubMenu = array();
+			$arSubMenu = array();
 
-		if (isset($this->data[$this->pk()]) && $this->hasWriteRights()) {
-			$arSubMenu[] = $this->getButton('ADD_ELEMENT', array(
-				'LINK' => static::getUrl(array_merge($this->additionalUrlParams,
-					array(
-						'action' => 'add',
-						'lang' => LANGUAGE_ID,
-						'restore_query' => 'Y',
-					))),
-				'ICON' => 'edit'
-			));
-		}
-
-		if ($showDeleteButton && isset($this->data[$this->pk()]) && $this->hasDeleteRights()) {
-			$arSubMenu[] = $this->getButton('DELETE_ELEMENT', array(
-				'ONCLICK' => "if(confirm('" . Loc::getMessage('DIGITALWAND_ADMIN_HELPER_EDIT_DELETE_CONFIRM') . "')) location.href='" .
-					static::getUrl(array_merge($this->additionalUrlParams,
+			if (isset($this->data[$this->pk()]) && $this->hasWriteRights()) {
+				$arSubMenu[] = $this->getButton('ADD_ELEMENT', array(
+					'LINK' => static::getUrl(array_merge($this->additionalUrlParams,
 						array(
-							'ID' => $this->data[$this->pk()],
-							'action' => 'delete',
+							'action' => 'add',
 							'lang' => LANGUAGE_ID,
 							'restore_query' => 'Y',
-						))) . "'",
-				'ICON' => 'delete'
-			));
-		}
+						))),
+					'ICON' => 'edit'
+				));
+			}
 
-		if (count($arSubMenu)) {
-			$menu[] = array('SEPARATOR' => 'Y');
-			$menu[] = $this->getButton('ACTIONS', array(
-				'MENU' => $arSubMenu,
-				'ICON' => 'btn_new'
-			));
+			if ($showDeleteButton && isset($this->data[$this->pk()]) && $this->hasDeleteRights()) {
+				$arSubMenu[] = $this->getButton('DELETE_ELEMENT', array(
+					'ONCLICK' => "if(confirm('" . Loc::getMessage('DIGITALWAND_ADMIN_HELPER_EDIT_DELETE_CONFIRM') . "')) location.href='" .
+						static::getUrl(array_merge($this->additionalUrlParams,
+							array(
+								'ID' => $this->data[$this->pk()],
+								'action' => 'delete',
+								'lang' => LANGUAGE_ID,
+								'restore_query' => 'Y',
+							))) . "'",
+					'ICON' => 'delete'
+				));
+			}
+
+			if (count($arSubMenu)) {
+				$menu[] = array('SEPARATOR' => 'Y');
+				$menu[] = $this->getButton('ACTIONS', array(
+					'MENU' => $arSubMenu,
+					'ICON' => 'btn_new'
+				));
+			}
 		}
 
 		return $menu;
@@ -327,6 +324,7 @@ abstract class AdminEditHelper extends AdminBaseHelper
 	 */
 	protected function showProlog()
 	{
+
 	}
 
 	/**
@@ -337,7 +335,7 @@ abstract class AdminEditHelper extends AdminBaseHelper
 	protected function showEpilog()
 	{
 		echo bitrix_sessid_post();
-	
+
         $interfaceSettings = static::getInterfaceSettings();
 
 		foreach ($interfaceSettings['FIELDS'] as $code => $settings) {
@@ -497,9 +495,10 @@ abstract class AdminEditHelper extends AdminBaseHelper
 	{
 		if (isset($_REQUEST[$this->pk()])) {
 			$className = static::getModel();
-			$result = $className::getById($_REQUEST[$this->pk()]);
-
-			return $result->fetch();
+			if(strlen($className) > 0){
+				$result = $className::getById($_REQUEST[$this->pk()]);
+				return $result->fetch();
+			}
 		}
 
 		return false;
@@ -523,15 +522,9 @@ abstract class AdminEditHelper extends AdminBaseHelper
 	 */
 	protected function saveElement($id = null)
 	{
-		foreach ($this->getFields() as $l => $field){
-			if($field['NO_SAVE'] == true){
-				unset($this->fields[$l]);
-				unset($this->data[$l]);
-			}
-		}
-
 		$className = static::getModel();
 		$entityManager = new EntityManager($className, $this->data, $id, $this);
+
 		$saveResult = $entityManager->save();
 		$this->addNotes($entityManager->getNotes());
 
@@ -608,8 +601,10 @@ abstract class AdminEditHelper extends AdminBaseHelper
 		if (!empty($this->data)) {
 			$title = Loc::getMessage('DIGITALWAND_ADMIN_HELPER_EDIT_TITLE', array('#ID#' => $this->data[$this->pk()]));
 		}
-		else {
+		elseif(strlen(static::$titlePage) == 0) {
 			$title = Loc::getMessage('DIGITALWAND_ADMIN_HELPER_NEW_ELEMENT');
+		} else {
+			$title = static::$titlePage;
 		}
 
 		$this->setTitle($title);

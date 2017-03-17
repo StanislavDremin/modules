@@ -2,51 +2,34 @@
 
 namespace DigitalWand\AdminHelper\Widget;
 
-use Bitrix\Main\Type;
-
 class DateTimeWidget extends HelperWidget
 {
 	/**
-	 * Генерирует HTML для редактирования поля
+	 * Р“РµРЅРµСЂРёСЂСѓРµС‚ HTML РґР»СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ РїРѕР»СЏ
 	 * @see AdminEditHelper::showField();
 	 * @return mixed
 	 */
 	protected function getEditHtml()
 	{
-		$time = $this->getValue();
-		$value = '';
-		if($time instanceof Type\DateTime || $time instanceof Type\Date){
-			$value = $time->format('d.m.Y H:i:s');
-		} else {
-			$value = ConvertTimeStamp(strtotime($this->getValue()));
-		}
-
-		return \CAdminCalendar::CalendarDate($this->getEditInputName(), $value, 10, true);
+		return \CAdminCalendar::CalendarDate($this->getEditInputName(), ConvertTimeStamp(strtotime($this->getValue()), "FULL"), 10, true);
 	}
 
 	/**
-	 * Генерирует HTML для поля в списке
+	 * Р“РµРЅРµСЂРёСЂСѓРµС‚ HTML РґР»СЏ РїРѕР»СЏ РІ СЃРїРёСЃРєРµ
 	 * @see AdminListHelper::addRowCell();
 	 * @param CAdminListRow $row
-	 * @param array $data - данные текущей строки
+	 * @param array $data - РґР°РЅРЅС‹Рµ С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРё
 	 * @return mixed
 	 */
 	public function generateRow(&$row, $data)
 	{
-		$time = $this->getValue();
-		$value = '';
-		if($time instanceof Type\DateTime || $time instanceof Type\Date){
-			$value = $time->format('d.m.Y H:i:s');
-		} else {
-			$value = ConvertTimeStamp(strtotime($this->getValue()));
-		}
 		if (isset($this->settings['EDIT_IN_LIST']) AND $this->settings['EDIT_IN_LIST'])
 		{
 			$row->AddCalendarField($this->getCode());
 		}
 		else
 		{
-			$arDate = ParseDateTime($value);
+			$arDate = ParseDateTime($this->getValue());
 
 			if ($arDate['YYYY'] < 10)
 			{
@@ -54,7 +37,7 @@ class DateTimeWidget extends HelperWidget
 			}
 			else
 			{
-				$stDate = ConvertDateTime($value, "DD.MM.YYYY HH:MI:SS", "ru");
+				$stDate = ConvertDateTime($this->getValue(), "DD.MM.YYYY HH:MI:SS", "ru");
 			}
 
 			$row->AddViewField($this->getCode(), $stDate);
@@ -62,7 +45,7 @@ class DateTimeWidget extends HelperWidget
 	}
 
 	/**
-	 * Генерирует HTML для поля фильтрации
+	 * Р“РµРЅРµСЂРёСЂСѓРµС‚ HTML РґР»СЏ РїРѕР»СЏ С„РёР»СЊС‚СЂР°С†РёРё
 	 * @see AdminListHelper::createFilterForm();
 	 * @return mixed
 	 */
@@ -75,7 +58,7 @@ class DateTimeWidget extends HelperWidget
 	}
 
 	/**
-	 * Сконвертируем дату в формат Mysql
+	 * РЎРєРѕРЅРІРµСЂС‚РёСЂСѓРµРј РґР°С‚Сѓ РІ С„РѕСЂРјР°С‚ Mysql
 	 * @return boolean
 	 */
 	public function processEditAction()

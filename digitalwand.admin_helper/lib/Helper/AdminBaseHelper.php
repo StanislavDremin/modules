@@ -314,7 +314,6 @@ abstract class AdminBaseHelper
 				$helperClass = $helperSettings; // в значении передается класс хелпера а не настройки
 				$helperSettings = array(); // настроек в старом формате нет
 			}
-
 			$success = $helperClass::registerInterfaceSettings($module, array_merge($settings, $helperSettings));
 			if (!$success) return false;
 		}
@@ -364,6 +363,7 @@ abstract class AdminBaseHelper
 			'helper' => get_called_class(),
 			'interface' => $interfaceSettings
 		);
+
 		return true;
 	}
 
@@ -489,6 +489,7 @@ abstract class AdminBaseHelper
 
 		$className = get_called_class();
 
+
 		if (!isset(static::$module[$className])) {
 			$classNameParts = explode('\\', trim($className, '\\'));
 
@@ -557,17 +558,13 @@ abstract class AdminBaseHelper
 	 * Возвращает список полей интерфейса.
      *
 	 * @see AdminBaseHelper::setInterfaceSettings()
-     * @param string $name
-	 *
+     *
 	 * @return array
      *
 	 * @api
 	 */
-	public function getFields($name = '')
+	public function getFields()
 	{
-		if(strlen($name) > 0)
-			return $this->fields[$name];
-
 		return $this->fields;
 	}
 
@@ -1125,6 +1122,8 @@ abstract class AdminBaseHelper
 	 */
 	public static function getHLEntityInfo($className)
 	{
+//		$arTmp = explode('\\', $className);
+//		$className = array_pop($arTmp);
 		$className = str_replace('\\', '', $className);
 		$pos = strripos($className, 'Table', -5);
 

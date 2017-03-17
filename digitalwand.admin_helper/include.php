@@ -1,42 +1,4 @@
 <?php
-
-use Bitrix\Main\Loader;
-
-Loader::registerAutoLoadClasses('digitalwand.admin_helper',
-    array(
-        'DigitalWand\AdminHelper\EventHandlers' => 'lib/EventHandlers.php',
-
-        'DigitalWand\AdminHelper\Helper\Exception' => 'lib/helper/Exception.php',
-
-        'DigitalWand\AdminHelper\Helper\AdminInterface' => 'lib/helper/AdminInterface.php',
-        'DigitalWand\AdminHelper\Helper\AdminBaseHelper' => 'lib/helper/AdminBaseHelper.php',
-        'DigitalWand\AdminHelper\Helper\AdminListHelper' => 'lib/helper/AdminListHelper.php',
-        'DigitalWand\AdminHelper\Helper\AdminSectionListHelper' => 'lib/helper/AdminSectionListHelper.php',
-        'DigitalWand\AdminHelper\Helper\AdminEditHelper' => 'lib/helper/AdminEditHelper.php',
-        'DigitalWand\AdminHelper\Helper\AdminSectionEditHelper' => 'lib/helper/AdminSectionEditHelper.php',
-
-        'DigitalWand\AdminHelper\EntityManager' => 'lib/EntityManager.php',
-
-        'DigitalWand\AdminHelper\Widget\HelperWidget' => 'lib/widget/HelperWidget.php',
-        'DigitalWand\AdminHelper\Widget\CheckboxWidget' => 'lib/widget/CheckboxWidget.php',
-        'DigitalWand\AdminHelper\Widget\ComboBoxWidget' => 'lib/widget/ComboBoxWidget.php',
-        'DigitalWand\AdminHelper\Widget\StringWidget' => 'lib/widget/StringWidget.php',
-        'DigitalWand\AdminHelper\Widget\NumberWidget' => 'lib/widget/NumberWidget.php',
-        'DigitalWand\AdminHelper\Widget\FileWidget' => 'lib/widget/FileWidget.php',
-        'DigitalWand\AdminHelper\Widget\TextAreaWidget' => 'lib/widget/TextAreaWidget.php',
-        'DigitalWand\AdminHelper\Widget\HLIBlockFieldWidget' => 'lib/widget/HLIBlockFieldWidget.php',
-        'DigitalWand\AdminHelper\Widget\DateTimeWidget' => 'lib/widget/DateTimeWidget.php',
-        'DigitalWand\AdminHelper\Widget\IblockElementWidget' => 'lib/widget/IblockElementWidget.php',
-        'DigitalWand\AdminHelper\Widget\UrlWidget' => 'lib/widget/UrlWidget.php',
-        'DigitalWand\AdminHelper\Widget\VisualEditorWidget' => 'lib/widget/VisualEditorWidget.php',
-        'DigitalWand\AdminHelper\Widget\UserWidget' => 'lib/widget/UserWidget.php',
-        'DigitalWand\AdminHelper\Widget\OrmElementWidget' => 'lib/widget/OrmElementWidget.php',
-        'DigitalWand\AdminHelper\Widget\AreaWidget' => 'lib/widget/AreaWidget.php',
-        'DigitalWand\AdminHelper\Widget\MultiShopWidget' => 'lib/widget/MultiShopWidget.php',
-        'DigitalWand\AdminHelper\Widget\SectionWidget' => 'lib/widget/SectionWidget.php',
-    )
-);
-
 spl_autoload_register(function ($className) {
 	preg_match('/^(.*?)([\w]+)$/i', $className, $matches);
 	if (count($matches) < 3) {
@@ -48,8 +10,8 @@ spl_autoload_register(function ($className) {
 		str_replace('\\', DIRECTORY_SEPARATOR, trim($matches[1], '\\')),
 		str_replace('_', DIRECTORY_SEPARATOR, $matches[2]) . '.php'
 	));
-	$filePath = str_replace('DigitalWand'.DIRECTORY_SEPARATOR .'AdminHelper'.DIRECTORY_SEPARATOR,'',$filePath);
-	$filePath = preg_replace('#DigitalWand\/AdminHelper\/#','',$filePath);
+	$filePath = str_replace('DigitalWand/AdminHelper/','',$filePath);
+	$filePath = preg_replace('#DigitalWand\/AdminHelper\/#i','',$filePath);
 	$filePath = str_replace(DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $filePath);
 
 	if (is_readable($filePath) && is_file($filePath)) {
@@ -57,3 +19,34 @@ spl_autoload_register(function ($className) {
 		require_once $filePath;
 	}
 });
+
+$path = '/local/modules/ab.tools/asset';
+$jsLibs = [
+	'bootstrap' => [
+		'css' => [
+			$path.'/css/bootstrap.min00.css',
+			$path.'/css/admin_bootstrap_debug.css',
+		]
+	],
+	'admin_helper' => [
+		'js' => [
+			$path.'/6-shim.min.js',
+			$path.'/js/shim/es6-sham.min.js',
+			$path.'/js/react/react-with-addons.min.js',
+			$path.'/js/react/react-dom.min.js',
+			$path.'/js/is.min.js',
+			$path.'/js/sweet_alert/sweetalert.min.js',
+			'/local/modules/digitalwand.admin_helper/asset/builds/ComponentCreate.js'
+		],
+		'css' => [
+			$path.'/css/sweetalert.css',
+			$path.'/css/animate.min.css',
+			$path.'/css/preloaders.css',
+			$path.'/css/font-awesome.min.css',
+			'/local/modules/digitalwand.admin_helper/asset/css/digitalwand.admin_helper.css',
+		],
+	],
+];
+foreach ($jsLibs as $name => $lib) {
+	CJSCore::RegisterExt($name, $lib);
+}

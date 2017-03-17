@@ -149,8 +149,6 @@ abstract class AdminListHelper extends AdminBaseHelper
 	 */
 	public $epilogHtml;
 
-	protected static $titlePage = '';
-
 	/**
 	 * Производится инициализация переменных, обработка запросов на редактирование
 	 *
@@ -225,12 +223,6 @@ abstract class AdminListHelper extends AdminBaseHelper
 			}
 			$this->groupActions($IDs, $_REQUEST['action']);
 		}
-
-		$classHelper = AdminListHelper::className();
-		if(is_callable(array($classHelper, 'titlePage'))){
-			$this->app->SetTitle($classHelper::titlePage());
-		}
-
 		if (isset($_REQUEST['action']) || isset($_REQUEST['action_button']) && count($this->getErrors()) == 0 ) {
 			$listHelperClass = $this->getHelperClass(AdminListHelper::className());
 			$className = $listHelperClass::getModel();
@@ -718,6 +710,7 @@ abstract class AdminListHelper extends AdminBaseHelper
 		$this->setContext(AdminListHelper::OP_GET_DATA_BEFORE);
 
 		$headers = $this->arHeader;
+
 		$sectionEditHelper = static::getHelperClass(AdminSectionEditHelper::className());
 
 		if ($sectionEditHelper) { // если есть реализация класса AdminSectionEditHelper, значит используются разделы
@@ -738,7 +731,6 @@ abstract class AdminListHelper extends AdminBaseHelper
 		$this->mergeSortHeader($headers);
 
 		$this->list->AddHeaders($headers);
-
 		$visibleColumns = $this->list->GetVisibleHeaderColumns();
 
 		if ($sectionEditHelper) {
@@ -1310,28 +1302,11 @@ abstract class AdminListHelper extends AdminBaseHelper
 	 */
 	protected function getData($className, $filter, $select, $sort, $raw)
 	{
-
 		$parameters = array(
 			'filter' => $filter,
 			'select' => $select,
 			'order' => $sort
 		);
-
-		foreach ($parameters as $t => $parameter) {
-			foreach ($parameter as $code => $item) {
-				if($code != 'ID' && $item != 'ID'){
-					if(intval($code) > 0){
-						if(!$className::getEntity()->hasField($item)){
-							unset($parameters[$t][$code]);
-						}
-					} else {
-						if(!$className::getEntity()->hasField($code)){
-							unset($parameters[$t][$code]);
-						}
-					}
-				}
-			}
-		}
 
 		/** @var Result $res */
 		$res = $className::getList($parameters);
@@ -1361,12 +1336,6 @@ abstract class AdminListHelper extends AdminBaseHelper
 	 */
 	public function createFilterForm()
 	{
-        //нужно пробрасывать параметр popup в форму, если она является таковой
-        if($this->isPopup())
-        {
-            $this->additionalUrlParams['popup'] = 'Y';
-        }
-
 		$this->setContext(AdminListHelper::OP_CREATE_FILTER_FORM);
 		print ' <form name="find_form" method="GET" action="' . static::getUrl($this->additionalUrlParams) . '?">';
 
@@ -1418,10 +1387,6 @@ abstract class AdminListHelper extends AdminBaseHelper
 	 */
 	public function show()
 	{
-		if(strlen(static::$titlePage) > 0){
-			$this->setTitle(static::$titlePage);
-		}
-
 		if (!$this->hasReadRights()) {
 			$this->addErrors(Loc::getMessage('DIGITALWAND_ADMIN_HELPER_ACCESS_FORBIDDEN'));
 			$this->showMessages();
@@ -1436,7 +1401,6 @@ abstract class AdminListHelper extends AdminBaseHelper
 		}
 
 		$this->saveGetQuery();
-
 	}
 
 	/**
@@ -1471,6 +1435,4 @@ abstract class AdminListHelper extends AdminBaseHelper
 	{
 		return static::getViewURL(static::getViewName(), static::$listPageUrl, $params);
 	}
-
-
 }

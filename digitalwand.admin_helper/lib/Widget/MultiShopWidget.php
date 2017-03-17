@@ -98,7 +98,7 @@ class MultiShopWidget extends IblockElementWidget
 				}
 			?>
 
-			// TODO Добавление созданных полей
+			// TODO Р”РѕР±Р°РІР»РµРЅРёРµ СЃРѕР·РґР°РЅРЅС‹С… РїРѕР»РµР№
 			multiple.addField();
 		</script>
 		<?
@@ -204,7 +204,7 @@ class MultiShopWidget extends IblockElementWidget
 				}
 			?>
 
-			// TODO Добавление созданных полей
+			// TODO Р”РѕР±Р°РІР»РµРЅРёРµ СЃРѕР·РґР°РЅРЅС‹С… РїРѕР»РµР№
 			multiple.addField();
 		</script>
 		<?

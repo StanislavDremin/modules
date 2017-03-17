@@ -10,21 +10,21 @@ use DigitalWand\AdminHelper\Helper\AdminSectionListHelper;
 Loc::loadMessages(__FILE__);
 
 /**
- * Виджет строки с текстом.
+ * Р’РёРґР¶РµС‚ СЃС‚СЂРѕРєРё СЃ С‚РµРєСЃС‚РѕРј.
  *
- * Доступные опции:
+ * Р”РѕСЃС‚СѓРїРЅС‹Рµ РѕРїС†РёРё:
  * <ul>
- * <li> <b>EDIT_LINK</b> - отображать в виде ссылки на редактирование элемента </li>
- * <li> <b>STYLE</b> - inline-стили для input </li>
- * <li> <b>SIZE</b> - значение атрибута size для input </li>
- * <li> <b>TRANSLIT</b> - true, если поле будет транслитерироваться в символьный код</li>
- * <li> <b>MULTIPLE</b> - поддерживается множественный ввод. В таблице требуется наличие поля VALUE</li>
+ * <li> <b>EDIT_LINK</b> - РѕС‚РѕР±СЂР°Р¶Р°С‚СЊ РІ РІРёРґРµ СЃСЃС‹Р»РєРё РЅР° СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ СЌР»РµРјРµРЅС‚Р° </li>
+ * <li> <b>STYLE</b> - inline-СЃС‚РёР»Рё РґР»СЏ input </li>
+ * <li> <b>SIZE</b> - Р·РЅР°С‡РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р° size РґР»СЏ input </li>
+ * <li> <b>TRANSLIT</b> - true, РµСЃР»Рё РїРѕР»Рµ Р±СѓРґРµС‚ С‚СЂР°РЅСЃР»РёС‚РµСЂРёСЂРѕРІР°С‚СЊСЃСЏ РІ СЃРёРјРІРѕР»СЊРЅС‹Р№ РєРѕРґ</li>
+ * <li> <b>MULTIPLE</b> - РїРѕРґРґРµСЂР¶РёРІР°РµС‚СЃСЏ РјРЅРѕР¶РµСЃС‚РІРµРЅРЅС‹Р№ РІРІРѕРґ. Р’ С‚Р°Р±Р»РёС†Рµ С‚СЂРµР±СѓРµС‚СЃСЏ РЅР°Р»РёС‡РёРµ РїРѕР»СЏ VALUE</li>
  * </ul>
  */
 class StringWidget extends HelperWidget
 {
     static protected $defaults = array(
-        'FILTER' => '%', //Фильтрация по подстроке, а не по точному соответствию.
+        'FILTER' => '%', //Р¤РёР»СЊС‚СЂР°С†РёСЏ РїРѕ РїРѕРґСЃС‚СЂРѕРєРµ, Р° РЅРµ РїРѕ С‚РѕС‡РЅРѕРјСѓ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЋ.
         'EDIT_IN_LIST' => true
     );
 
@@ -113,7 +113,7 @@ class StringWidget extends HelperWidget
                        }
                        ?>
 
-            // TODO Добавление созданных полей
+            // TODO Р”РѕР±Р°РІР»РµРЅРёРµ СЃРѕР·РґР°РЅРЅС‹С… РїРѕР»РµР№
             multiple.addField();
         </script>
         <?
@@ -147,10 +147,10 @@ class StringWidget extends HelperWidget
     }
 
     /**
-     * Генерирует HTML для поля в списке
+     * Р“РµРЅРµСЂРёСЂСѓРµС‚ HTML РґР»СЏ РїРѕР»СЏ РІ СЃРїРёСЃРєРµ
      * @see AdminListHelper::addRowCell();
      * @param \CAdminListRow $row
-     * @param array $data - данные текущей строки
+     * @param array $data - РґР°РЅРЅС‹Рµ С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРё
      */
     public function generateRow(&$row, $data)
     {
@@ -200,11 +200,11 @@ class StringWidget extends HelperWidget
                 list($from, $to) = $this->getFilterInputName();
                 print '<td>
             <div class="adm-filter-box-sizing">
-                <span style="display: inline-block; left: 11px; top: 5px; position: relative;">От:</span>
+                <span style="display: inline-block; left: 11px; top: 5px; position: relative;">РћС‚:</span>
                 <div class="adm-input-wrap" style="display: inline-block">
                     <input type="text" class="adm-input" name="' . $from . '" value="' . $$from . '">
                 </div>
-                <span style="display: inline-block; left: 11px; top: 5px; position: relative;">До:</span>
+                <span style="display: inline-block; left: 11px; top: 5px; position: relative;">Р”Рѕ:</span>
                 <div class="adm-input-wrap" style="display: inline-block">
                     <input type="text" class="adm-input" name="' . $to . '" value="' . $$to . '">
                 </div>

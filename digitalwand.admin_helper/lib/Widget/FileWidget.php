@@ -6,12 +6,12 @@ use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\UI\FileInput;
 
 /**
- * Для множественного поля в таблице должен быть столбец FILE_ID.
- * Настройки класса:
+ * Р”Р»СЏ РјРЅРѕР¶РµСЃС‚РІРµРЅРЅРѕРіРѕ РїРѕР»СЏ РІ С‚Р°Р±Р»РёС†Рµ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ СЃС‚РѕР»Р±РµС† FILE_ID.
+ * РќР°СЃС‚СЂРѕР№РєРё РєР»Р°СЃСЃР°:
  * <ul>
- * <li><b>DESCRIPTION_FIELD</b> - bool нужно ли поле описания</li>
- * <li><b>MULTIPLE</b> - bool является ли поле множественным</li>
- * <li><b>IMAGE</b> - bool отображать ли изображение файла, для старого вида отображения</li>
+ * <li><b>DESCRIPTION_FIELD</b> - bool РЅСѓР¶РЅРѕ Р»Рё РїРѕР»Рµ РѕРїРёСЃР°РЅРёСЏ</li>
+ * <li><b>MULTIPLE</b> - bool СЏРІР»СЏРµС‚СЃСЏ Р»Рё РїРѕР»Рµ РјРЅРѕР¶РµСЃС‚РІРµРЅРЅС‹Рј</li>
+ * <li><b>IMAGE</b> - bool РѕС‚РѕР±СЂР°Р¶Р°С‚СЊ Р»Рё РёР·РѕР±СЂР°Р¶РµРЅРёРµ С„Р°Р№Р»Р°, РґР»СЏ СЃС‚Р°СЂРѕРіРѕ РІРёРґР° РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ</li>
  * </ul>
  */
 class FileWidget extends HelperWidget
@@ -186,7 +186,7 @@ class FileWidget extends HelperWidget
         
         if ($this->getSettings('MULTIPLE')) {
             if ($this->getSettings('READONLY') === true) {
-                //удаляем все добавленные файлы в режиме только для чтения
+                //СѓРґР°Р»СЏРµРј РІСЃРµ РґРѕР±Р°РІР»РµРЅРЅС‹Рµ С„Р°Р№Р»С‹ РІ СЂРµР¶РёРјРµ С‚РѕР»СЊРєРѕ РґР»СЏ С‡С‚РµРЅРёСЏ
                 foreach ($this->data[$this->code] as $key => $value) {
                     if (!is_array($value)) {
                         unset($this->data[$this->code][$key]);
@@ -234,7 +234,7 @@ class FileWidget extends HelperWidget
                         }
                         continue;
                     } elseif (is_int($key)) {
-                        //Удаляем старый файл при замене
+                        //РЈРґР°Р»СЏРµРј СЃС‚Р°СЂС‹Р№ С„Р°Р№Р» РїСЂРё Р·Р°РјРµРЅРµ
                         if (is_array($this->data[$this->getCode()][$key]) &&
                             !empty($this->data[$this->getCode()][$key]['VALUE'])
                         ) {

@@ -25,7 +25,7 @@ class Service {
 						STATUS: 0,
 						SYSTEM: null,
 					};
-					Swal({title: "", text: errTxt, type: "error"});
+					swal({title: "", text: errTxt, type: "error"});
 				} else if (data.STATUS == 0) {
 					if (data.ERRORS != null && data.ERRORS.length > 0) {
 						errTxt = data.ERRORS.join("\n");
@@ -34,7 +34,7 @@ class Service {
 							data.SYSTEM = null;
 						}
 					}
-					Swal({
+					swal({
 						title: 'Ошибка',
 						text: errTxt,
 						type: 'error'

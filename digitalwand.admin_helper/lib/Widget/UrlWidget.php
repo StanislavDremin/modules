@@ -7,14 +7,14 @@ use Bitrix\Main\Localization\Loc;
 Loc::loadMessages(__FILE__);
 
 /**
- * Виджет текстового поля для ввода гиперссылки.
+ * Р’РёРґР¶РµС‚ С‚РµРєСЃС‚РѕРІРѕРіРѕ РїРѕР»СЏ РґР»СЏ РІРІРѕРґР° РіРёРїРµСЂСЃСЃС‹Р»РєРё.
  *
- * Доступные опции:
+ * Р”РѕСЃС‚СѓРїРЅС‹Рµ РѕРїС†РёРё:
  * <ul>
- * <li> PROTOCOL_REQUIRED - ссылка должна иметь протокол</li>
- * <li> STYLE - inline-стили </li>
- * <li> SIZE - значение атрибута size для input </li>
- * <li> MAX_URL_LEN - длина отображаемого URL</li>
+ * <li> PROTOCOL_REQUIRED - СЃСЃС‹Р»РєР° РґРѕР»Р¶РЅР° РёРјРµС‚СЊ РїСЂРѕС‚РѕРєРѕР»</li>
+ * <li> STYLE - inline-СЃС‚РёР»Рё </li>
+ * <li> SIZE - Р·РЅР°С‡РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р° size РґР»СЏ input </li>
+ * <li> MAX_URL_LEN - РґР»РёРЅР° РѕС‚РѕР±СЂР°Р¶Р°РµРјРѕРіРѕ URL</li>
  * </ul>
  *
  * @author Nik Samokhvalov <nik@samokhvalov.info>
