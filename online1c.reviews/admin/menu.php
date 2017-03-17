@@ -14,7 +14,7 @@ $menu = array(
 	"icon" => "fileman_sticker_icon",
 	"page_icon" => "fileman_sticker_icon",
 	"more_url" => [
-		'route.php'
+		'admin_helper_route.php'
 	],
 	"items_id" => "online_1c_reviews",
 	"module_id" => 'online1c.reviews',

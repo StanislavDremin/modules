@@ -20,9 +20,7 @@ function getRequestParams($param)
 	}
 }
 
-/**
- * ������� ���������� ������, ����� ���������� ����������������� � ������ $table_id.
- *
+/***
  * @global CMain $APPLICATION
  */
 global $APPLICATION;
@@ -43,7 +41,6 @@ if (!$module OR !$view OR !Loader::includeModule($module)) {
 	include $_SERVER['DOCUMENT_ROOT'] . BX_ROOT . '/admin/404.php';
 }
 
-// �������� ��� ������ ���������� ����������
 $moduleNameParts = explode('.', $module);
 
 if($k = array_search('admin_helper', $moduleNameParts)){
