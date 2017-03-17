@@ -363,4 +363,55 @@ class Checkbox extends BaseField{
 	}
 }
 
-export {String, Select, Checkbox}
+class RadioBox extends Checkbox {
+	constructor(props){
+		super(props);
+
+	}
+
+	render(){
+		let fieldClass = this.getFieldClass();
+		let checked = this.state.value === this.props.value ? 'checked' : false;
+
+		return (
+			<input type="radio" name={this.props.name}
+				className={fieldClass} id={this.props.id}
+				onChange={this.change} value={this.props.value}
+				disabled={this.props.disabled} checked={checked}/>
+		);
+	}
+}
+
+class Text extends BaseField {
+	constructor(props){
+		super(props);
+
+	}
+
+	static defaultProps = {
+		value: '',
+		errorClass: '',
+		disabled: false,
+		cols: 30,
+		rows: 10
+	};
+
+	render(){
+
+		let fieldClass = this.getFieldClass();
+
+		return (
+			<span className="field_form_wrap">
+				<textarea value={this.state.value}
+					name={this.props.name}
+					onChange={this.change}
+					className={fieldClass}
+					disabled={this.props.disabled}
+					cols={this.props.cols} rows={this.props.rows}/>
+				{this.getErrorMessage()}
+			</span>
+		)
+	}
+}
+
+export {String, Select, Checkbox, RadioBox, Text}
