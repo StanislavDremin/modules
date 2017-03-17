@@ -3,7 +3,6 @@ use Bitrix\Main\Localization\Loc;
 use DigitalWand\AdminHelper\Page;
 
 Bitrix\Main\Loader::includeModule('digitalwand.admin_helper');
-
 Loc::loadLanguageFile(__FILE__);
 global $USER;
 
@@ -34,5 +33,5 @@ $menu = array(
 		),
 	]
 );
-
+//PR($menu);
 return $menu;
