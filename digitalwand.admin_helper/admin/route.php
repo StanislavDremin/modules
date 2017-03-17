@@ -64,6 +64,10 @@ for ($i = 0; $i < $count; $i++) {
 	$parts[] = $interfaceName;
 	$class = array_map('ucfirst', $parts);
 	$interfaceNameClass = implode('\\', $class);
+
+
+//	PR($interfaceNameClass);
+
 	if (class_exists($interfaceNameClass)) {
 		break;
 	} else {
@@ -75,7 +79,6 @@ for ($i = 0; $i < $count; $i++) {
 			break;
 		} else {
 			$className = array_pop($parts);
-
 			$parts[] = 'AdminInterface';
 			$parts[] = $className;
 			$class = array_map('ucfirst', $parts);

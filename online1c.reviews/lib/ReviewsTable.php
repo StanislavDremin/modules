@@ -70,7 +70,10 @@ class ReviewsTable extends Helpers\MainDataManager
 			),
 			new Entity\IntegerField(
 				'USER_ID',
-				['title' => self::getTitleField('USER_ID')]
+				[
+					'title' => self::getTitleField('USER_ID'),
+					'default_value' => self::getUser()->GetID()
+				]
 			),
 			new Entity\StringField(
 				'ELEMENT_CODE',
