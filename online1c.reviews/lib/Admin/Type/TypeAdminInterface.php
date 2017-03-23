@@ -48,8 +48,8 @@ class TypeAdminInterface extends AdminInterface
 	public function helpers()
 	{
 		return [
-			'\Online1c\Reviews\Admin\Type\TypeListEdit',
-			'\Online1c\Reviews\Admin\Type\TypeList',
+			'\Online1c\Reviews\Admin\Type\TypeListEditHelper',
+			'\Online1c\Reviews\Admin\Type\TypeListHelper',
 		];
 	}
 

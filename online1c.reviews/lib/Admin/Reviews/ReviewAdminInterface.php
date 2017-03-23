@@ -27,7 +27,7 @@ class ReviewAdminInterface extends AdminInterface
 						])
 					],
 					'USER_ID' => [
-						'WIDGET' => new Widget\UserWidget(['FORM_ID' => ReviewEdit::generateFormId().'_form']),
+						'WIDGET' => new Widget\UserWidget(['FORM_ID' => ReviewEditHelper::generateFormId().'_form']),
 						'REQUIRED' => true
 					],
 					'ELEMENT_CODE' => [
@@ -39,7 +39,8 @@ class ReviewAdminInterface extends AdminInterface
 							'VARIANTS' => [
 								ReviewsTable::REVIEW_NO_ACTIVE => 'На модерации',
 								ReviewsTable::REVIEW_ACTIVE => 'Опубликован'
-							]
+							],
+							'EDIT_IN_LIST' => true
 						])
 					],
 					'TYPE_ID' => [
@@ -123,8 +124,8 @@ class ReviewAdminInterface extends AdminInterface
 	public function helpers()
 	{
 		return [
-			'\Online1c\Reviews\Admin\Reviews\ReviewList',
-			'\Online1c\Reviews\Admin\Reviews\ReviewEdit',
+			'\Online1c\Reviews\Admin\Reviews\ReviewListHelper',
+			'\Online1c\Reviews\Admin\Reviews\ReviewEditHelper',
 		];
 	}
 

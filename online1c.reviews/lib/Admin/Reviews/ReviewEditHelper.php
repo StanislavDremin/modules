@@ -8,7 +8,7 @@ namespace Online1c\Reviews\Admin\Reviews;
 
 use DigitalWand\AdminHelper\Helper;
 
-class ReviewEdit extends Helper\AdminEditHelper
+class ReviewEditHelper extends Helper\AdminEditHelper
 {
 	protected static $model = '\Online1c\Reviews\ReviewsTable';
 

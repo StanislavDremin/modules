@@ -9,7 +9,7 @@ namespace Online1c\Reviews\Admin\Type;
 
 use DigitalWand\AdminHelper\Helper;
 
-class TypeList extends Helper\AdminListHelper
+class TypeListHelper extends Helper\AdminListHelper
 {
 	protected static $model = '\\Online1c\\Reviews\\TypesTable';
 	public static $titlePage = 'Типы отзывов';

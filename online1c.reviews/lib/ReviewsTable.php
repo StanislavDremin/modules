@@ -25,6 +25,7 @@ class ReviewsTable extends Helpers\MainDataManager
 	const TYPE_TEXT = 'text'; // типы текста
 	const TYPE_HTML = 'html';
 	const CACHE_DIR = '/online1c/cmp/reviews'; // папка для кеша отзывов
+	const CACHE_ID = 'reviews_list_';
 
 	/** @var string */
 	protected static $loc_prefix = 'O1C_REVIEW_ENTITY.';
@@ -124,11 +125,11 @@ class ReviewsTable extends Helpers\MainDataManager
 			),
 			new Entity\IntegerField(
 				'LIKE',
-				['title' => self::getTitleField('LIKE')]
+				['title' => self::getTitleField('LIKE'), 'default_value' => 0]
 			),
 			new Entity\IntegerField(
 				'DISLIKE',
-				['title' => self::getTitleField('DISLIKE')]
+				['title' => self::getTitleField('DISLIKE'), 'default_value' => 0]
 			),
 			new Entity\IntegerField(
 				'LEVEL',
@@ -161,6 +162,11 @@ class ReviewsTable extends Helpers\MainDataManager
 				'TYPE_ID',
 				['title' => self::getTitleField('TYPE_ID'), 'required' => true]
 			),
+			new Entity\ReferenceField(
+				'TYPE_REVIEW',
+				TypesTable::getEntity(),
+				['=this.TYPE_ID' => 'ref.ID']
+			),
 			new Entity\DatetimeField(
 				'DATE_CREATE',
 				[
@@ -191,7 +197,7 @@ class ReviewsTable extends Helpers\MainDataManager
 			),
 			new Entity\FloatField(
 				'RATING_VAL',
-				['title' => self::getTitleField('RATING_VAL')]
+				['title' => self::getTitleField('RATING_VAL'), 'default_value' => 0]
 			),
 		];
 	}
@@ -203,7 +209,7 @@ class ReviewsTable extends Helpers\MainDataManager
 	public static function clearCacheTag($elementId = '')
 	{
 		if (strlen($elementId) > 0){
-			$tagId = 'reviews_list_'.$elementId;
+			$tagId = self::CACHE_ID.$elementId;
 			$TaggedCache = new Data\TaggedCache();
 			$TaggedCache->clearByTag($tagId);
 		}
@@ -212,36 +218,51 @@ class ReviewsTable extends Helpers\MainDataManager
 	/**
 	 * @method onAfterAdd
 	 * @param Event $event
+	 *
+	 * @return Entity\EventResult
 	 */
 	public static function onAfterAdd(Event $event)
 	{
+		$result = new Entity\EventResult();
 		$fields = $event->getParameter('fields');
 		self::clearCacheTag($fields['ELEMENT_CODE']);
 		if ($fields['RATING_VAL'])
 			self::calcRating($fields['ELEMENT_CODE'], intval($fields['RATING_VAL']));
+
+		return $result;
 	}
 
 	/**
 	 * @method onAfterUpdate
 	 * @param Event $event
+	 *
+	 * @return Entity\EventResult
 	 */
 	public static function onAfterUpdate(Event $event)
 	{
+		$result = new Entity\EventResult();
 		$fields = $event->getParameter('fields');
 		self::clearCacheTag($fields['ELEMENT_CODE']);
 		if ($fields['RATING_VAL'])
 			self::calcRating($fields['ELEMENT_CODE'], intval($fields['RATING_VAL']));
+
+		return $result;
 	}
 
 	/**
 	 * @method onBeforeDelete
 	 * @param Event $event
+	 *
+	 * @return Entity\EventResult
 	 */
 	public static function onBeforeDelete(Event $event)
 	{
+		$result = new Entity\EventResult();
 		$id = $event->getParameter('id')['ID'];
 		$row = self::getRowById($id);
 		self::clearCacheTag($row['ELEMENT_CODE']);
+
+		return $result;
 	}
 
 	public static function calcRating($id, $val = null)

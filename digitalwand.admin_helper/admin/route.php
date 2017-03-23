@@ -57,7 +57,6 @@ for ($i = 0; $i < $count; $i++) {
 	$interfaceName = implode('', array_map('ucfirst', $viewParts));
 
 	$parts = $interfaceNameParts;
-//	$parts[] = $interfaceName . 'AdminInterface';
 	$parts[] = $interfaceName;
 	$class = array_map('ucfirst', $parts);
 	$interfaceNameClass = implode('\\', $class);
@@ -102,6 +101,7 @@ for ($i = 0; $i < $count; $i++) {
 /**
  * @var AdminInterface $interfaceNameClass
  */
+
 
 if ($interfaceNameClass && class_exists($interfaceNameClass)) {
 	$interfaceNameClass::register();

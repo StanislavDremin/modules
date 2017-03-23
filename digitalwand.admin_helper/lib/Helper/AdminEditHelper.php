@@ -178,6 +178,14 @@ abstract class AdminEditHelper extends AdminBaseHelper
 		$this->setElementTitle();
 	}
 
+	public static function generateFormId($name = ''){
+		if(strlen($name) == 0){
+			$name = str_replace("\\", "", get_called_class());
+		}
+
+		return $name;
+	}
+
 	/**
 	 * Возвращает верхнее меню страницы.
 	 * По-умолчанию две кнопки:

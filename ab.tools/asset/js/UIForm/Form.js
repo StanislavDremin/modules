@@ -35,7 +35,8 @@ class Form extends React.Component {
 		className: '',
 		method: 'post',
 		name: '',
-		id: ''
+		id: '',
+		isClear: false
 	};
 
 	change(ev) {}
@@ -104,11 +105,19 @@ class Form extends React.Component {
 				if (this.props.hasOwnProperty('onChange')) {
 					this.props.onChange(newState);
 				}
+			},
+			isClearForm: (status = false)=> {
+				if (this.props.hasOwnProperty('isClear')){
+					return this.props.isClear;
+				}
+
+				return status
 			}
 		}
 	}
 
 	render() {
+
 		return (
 			<form noValidate={this.props.noValidate}
 				autoComplete={this.props.autoComplete}
@@ -126,6 +135,7 @@ class Form extends React.Component {
 }
 Form.childContextTypes = {
 	changeField: React.PropTypes.func,
+	isClearForm: React.PropTypes.func
 };
 
 export default Form;

@@ -61,7 +61,7 @@ class BaseField extends React.Component {
 	}
 
 	setValid(val){
-		if(this.props.hasOwnProperty('valid')){
+		if(this.props.hasOwnProperty('valid') && this.props.valid !== null && this.props.valid !== false){
 			if(val === undefined || val === null)
 				val = '';
 
@@ -81,7 +81,7 @@ class BaseField extends React.Component {
 	}
 
 	unSubscribeForm(){
-		//todo сделать отписку событий от родительской формы
+		//todo СЃРґРµР»Р°С‚СЊ РѕС‚РїРёСЃРєСѓ СЃРѕР±С‹С‚РёР№ РѕС‚ СЂРѕРґРёС‚РµР»СЊСЃРєРѕР№ С„РѕСЂРјС‹
 		// let $field = $(ReactDOM.findDOMNode(this));
 		// let $form = $field.closest('form');
 		// $form.off('submit');
@@ -106,9 +106,11 @@ class BaseField extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+
 		if (nextProps.hasOwnProperty('value') && nextProps.value !== this.props.value) {
 			this.setValue({value: nextProps.value, name: nextProps.name});
 		}
+
 	}
 
 	componentDidMount () {
@@ -127,7 +129,7 @@ class BaseField extends React.Component {
 	}
 
 	componentWillUnmount(){
-		// todo сделать отписку событий от родительской формы
+		// todo СЃРґРµР»Р°С‚СЊ РѕС‚РїРёСЃРєСѓ СЃРѕР±С‹С‚РёР№ РѕС‚ СЂРѕРґРёС‚РµР»СЊСЃРєРѕР№ С„РѕСЂРјС‹
 	}
 
 	getFieldClass(){
@@ -161,6 +163,7 @@ class BaseField extends React.Component {
 }
 BaseField.contextTypes = {
 	changeField: React.PropTypes.func,
+	isClearForm: React.PropTypes.func
 };
 
 class String extends BaseField {
@@ -278,6 +281,7 @@ class Select extends BaseField {
 		if (nextProps.hasOwnProperty('items') && nextProps.items.length !== this.props.items.length) {
 			this.setState({items: nextProps.items});
 		}
+
 		if (nextProps.hasOwnProperty('value') && nextProps.value.id !== this.props.value.id) {
 			this.setValue({value: nextProps.value, name: nextProps.name});
 		}
@@ -396,22 +400,33 @@ class Text extends BaseField {
 		rows: 10
 	};
 
+	change(ev){
+		super.change(ev);
+
+		if(ev.target.clientHeight < ev.target.scrollHeight){
+			this.setState({height: ev.target.scrollHeight + 20});
+		}
+
+	}
+
 	render(){
-
 		let fieldClass = this.getFieldClass();
-
+		let styleHeight = {};
+		if(this.state.height !== undefined){
+			styleHeight.height = this.state.height + 'px';
+		}
 		return (
 			<span className="field_form_wrap">
-				<textarea value={this.state.value}
+				<textarea value={this.state.value} style={styleHeight}
 					name={this.props.name}
 					onChange={this.change}
 					className={fieldClass}
 					disabled={this.props.disabled}
-					cols={this.props.cols} rows={this.props.rows}/>
+					cols={this.props.cols} rows={this.props.rows} placeholder={this.props.placeholder}/>
 				{this.getErrorMessage()}
 			</span>
 		)
 	}
 }
 
-export {String, Select, Checkbox, RadioBox, Text}
+export {String, Select, Checkbox, RadioBox, Text};
