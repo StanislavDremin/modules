@@ -53,8 +53,6 @@ abstract class AdminEditHelper extends AdminBaseHelper
 	 */
 	protected $tabControl;
 
-	public static $titlePage = '';
-
 	/**
 	 * Производится инициализация переменных, обработка запросов на редактирование
 	 *
@@ -176,6 +174,14 @@ abstract class AdminEditHelper extends AdminBaseHelper
 		}
 
 		$this->setElementTitle();
+	}
+
+	public static function generateFormId($name = ''){
+		if(strlen($name) == 0){
+			$name = str_replace("\\", "", get_called_class());
+		}
+
+		return $name;
 	}
 
 	/**

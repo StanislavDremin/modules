@@ -20,9 +20,7 @@ function getRequestParams($param)
 	}
 }
 
-/**
- * Очищаем переменные сессии, чтобы сортировка восстанавливалась с учетом $table_id.
- *
+/***
  * @global CMain $APPLICATION
  */
 global $APPLICATION;
@@ -43,7 +41,6 @@ if (!$module OR !$view OR !Loader::includeModule($module)) {
 	include $_SERVER['DOCUMENT_ROOT'] . BX_ROOT . '/admin/404.php';
 }
 
-// Собираем имя класса админского интерфейса
 $moduleNameParts = explode('.', $module);
 
 if($k = array_search('admin_helper', $moduleNameParts)){
@@ -60,7 +57,6 @@ for ($i = 0; $i < $count; $i++) {
 	$interfaceName = implode('', array_map('ucfirst', $viewParts));
 
 	$parts = $interfaceNameParts;
-//	$parts[] = $interfaceName . 'AdminInterface';
 	$parts[] = $interfaceName;
 	$class = array_map('ucfirst', $parts);
 	$interfaceNameClass = implode('\\', $class);
@@ -105,6 +101,7 @@ for ($i = 0; $i < $count; $i++) {
 /**
  * @var AdminInterface $interfaceNameClass
  */
+
 
 if ($interfaceNameClass && class_exists($interfaceNameClass)) {
 	$interfaceNameClass::register();

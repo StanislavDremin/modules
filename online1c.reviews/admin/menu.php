@@ -14,17 +14,17 @@ $menu = array(
 	"icon" => "fileman_sticker_icon",
 	"page_icon" => "fileman_sticker_icon",
 	"more_url" => [
-		'route.php'
+		'admin_helper_route.php'
 	],
 	"items_id" => "online_1c_reviews",
 	"module_id" => 'online1c.reviews',
 	"items" => [
 		array(
 			"sort" => 10,
-			"url" => Admin\Type\TypeList::getUrl(),
+			"url" => Admin\Type\TypeListHelper::getUrl(),
 			"more_url" => array(
-				Admin\Type\TypeList::getUrl(),
-				Admin\Type\TypeListEdit::getUrl()
+				Admin\Type\TypeListHelper::getUrl(),
+				Admin\Type\TypeListEditHelper::getUrl()
 			),
 			"text" => 'Список типов',
 			"icon" => "iblock_menu_icon_iblocks", //highloadblock_menu_icon
@@ -32,10 +32,10 @@ $menu = array(
 		),
 		array(
 			"sort" => 10,
-			"url" => Admin\Reviews\ReviewList::getUrl(),
+			"url" => Admin\Reviews\ReviewListHelper::getUrl(),
 			"more_url" => array(
-				Admin\Reviews\ReviewList::getUrl(),
-				Admin\Reviews\ReviewEdit::getUrl()
+				Admin\Reviews\ReviewListHelper::getUrl(),
+				Admin\Reviews\ReviewEditHelper::getUrl()
 			),
 			"text" => 'Список отзывов',
 			"icon" => "iblock_menu_icon_iblocks", //highloadblock_menu_icon

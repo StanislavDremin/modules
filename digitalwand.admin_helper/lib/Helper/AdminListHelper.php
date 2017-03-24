@@ -1381,6 +1381,11 @@ abstract class AdminListHelper extends AdminBaseHelper
 		return str_replace('.', '', static::$tablePrefix . $this->table());
 	}
 
+	protected function setPageTitle()
+	{
+		$this->setTitle(static::$titlePage);
+	}
+
 	/**
 	 * Выводит сформированный список.
 	 * Сохраняет обработанный GET-запрос в сессию
@@ -1393,6 +1398,7 @@ abstract class AdminListHelper extends AdminBaseHelper
 
 			return false;
 		}
+		$this->setPageTitle();
 		$this->showMessages();
 		$this->list->DisplayList();
 

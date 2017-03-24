@@ -8,6 +8,7 @@
 namespace AB\Tools;
 
 use Bitrix\Main\Text\Encoding;
+use Bitrix\Main\IO;
 
 /**
  * Class Debug
@@ -21,18 +22,19 @@ class Debug extends \Bitrix\Main\Diag\Debug
 
 	public static function convertTranslitMetric($data)
 	{
-		return \CUtil::translit($data, 'ru', ['replace_space'=> ' ', 'change_case' => false, 'safe_chars' => '.,']);
+		return \CUtil::translit($data, 'ru', ['replace_space' => ' ', 'change_case' => false, 'safe_chars' => '.,']);
 	}
 
 	/**
 	 * @method getMemory - get param memory
 	 * @param bool $flag
 	 * @param bool $show
+	 *
 	 * @return mixed
 	 */
 	public static function getMemory($flag = false, $show = false)
 	{
-		if(self::$memory && !is_null(self::$memory)){
+		if (self::$memory && !is_null(self::$memory)){
 			$endMemory = memory_get_usage() - self::$memory;
 		} else {
 			$endMemory = memory_get_usage($flag);
@@ -40,7 +42,7 @@ class Debug extends \Bitrix\Main\Diag\Debug
 
 		$out = self::convertTranslitMetric(\CFile::FormatSize($endMemory));
 
-		if($show){
+		if ($show){
 			PR($out);
 		} else {
 			return $out;
@@ -57,15 +59,16 @@ class Debug extends \Bitrix\Main\Diag\Debug
 	 * @method getSql
 	 * @param object $obj
 	 * @param bool $show
+	 *
 	 * @return mixed
 	 */
 	public static function getSql($obj, $show = true)
 	{
-		if(class_exists(array($obj, 'getTrackerQuery')))
+		if (class_exists(array($obj, 'getTrackerQuery')))
 			self::$sql = $obj->getTrackerQuery()->getSql();
 
 		\Bitrix\Main\Application::getConnection()->stopTracker();
-		if($show)
+		if ($show)
 			PR(\Bitrix\Main\Application::getConnection()->getTracker());
 		else
 			self::$sql = \Bitrix\Main\Application::getConnection()->getTracker();
@@ -85,7 +88,7 @@ class Debug extends \Bitrix\Main\Diag\Debug
 	public static function getTime($show = false)
 	{
 		$time = round(\getmicrotime() - self::$time, 4);
-		if($show)
+		if ($show)
 			PR($time);
 
 		return $time;
@@ -107,57 +110,57 @@ class Debug extends \Bitrix\Main\Diag\Debug
 	 * @param $traceDepth integer
 	 * @param $bShowArgs bool
 	 * */
-	public static function toLog($sText, $pathLog = false, $traceDepth = 10, $bShowArgs = false){
+	public static function toLog($sText, $pathLog = false, $traceDepth = 10, $bShowArgs = false)
+	{
 		$mess = print_r($sText, 1);
 		$mess = Encoding::convertEncodingToCurrent($mess);
-		if(empty($mess))
+		if (empty($mess))
 			$mess = 'EMPTY';
 
-		if(!$pathLog){
+		if (!$pathLog){
 			$pathLog = $_SERVER['DOCUMENT_ROOT'].'/local/lg/esd_lg979076ssda.txt';
 		}
 
-		if ($fp = @fopen($pathLog, "ab+")){
-			@fwrite($fp, "Host: ".$_SERVER["HTTP_HOST"]."\nDate: ".date("Y-m-d H:i:s")."\n".$mess."\n");
-			$arBacktrace = \Bitrix\Main\Diag\Helper::getBackTrace($traceDepth, ($bShowArgs? null : DEBUG_BACKTRACE_IGNORE_ARGS));
-			$strFunctionStack = "";
-			$strFilesStack = "";
-			$iterationsCount = min(count($arBacktrace), $traceDepth);
-			for ($i = 1; $i < $iterationsCount; $i++)
-			{
-				if (strlen($strFunctionStack)>0)
-					$strFunctionStack .= " < ";
+		$file = new IO\File($pathLog);
+		$file->getDirectory()->create();
 
-				if (isset($arBacktrace[$i]["class"]))
-					$strFunctionStack .= $arBacktrace[$i]["class"]."::";
-
-				$strFunctionStack .= $arBacktrace[$i]["function"];
-
-				if(isset($arBacktrace[$i]["file"]))
-					$strFilesStack .= "\t".$arBacktrace[$i]["file"].":".$arBacktrace[$i]["line"]."\n";
-				if($bShowArgs && isset($arBacktrace[$i]["args"]))
-				{
-					$strFilesStack .= "\t\t";
-					if (isset($arBacktrace[$i]["class"]))
-						$strFilesStack .= $arBacktrace[$i]["class"]."::";
-					$strFilesStack .= $arBacktrace[$i]["function"];
-					$strFilesStack .= "(\n";
-					foreach($arBacktrace[$i]["args"] as $value)
-						$strFilesStack .= "\t\t\t".$value."\n";
-					$strFilesStack .= "\t\t)\n";
-
-				}
-			}
-
-			if (strlen($strFunctionStack)>0)
-			{
-				@fwrite($fp, "    ".$strFunctionStack."\n".$strFilesStack);
-			}
-
-			@fwrite($fp, "----------\n");
-			@fflush($fp);
-			@flock($fp, LOCK_UN);
-			@fclose($fp);
+		if(!$file->isExists()){
+			$file->putContents('');
 		}
+
+		$file->putContents("Host: ".$_SERVER["HTTP_HOST"]."\nDate: ".date("Y-m-d H:i:s")."\n".$mess."\n", $file::APPEND);
+
+		$arBacktrace = \Bitrix\Main\Diag\Helper::getBackTrace($traceDepth, ($bShowArgs ? null : DEBUG_BACKTRACE_IGNORE_ARGS));
+		$strFunctionStack = "";
+		$strFilesStack = "";
+		$iterationsCount = min(count($arBacktrace), $traceDepth);
+		for ($i = 1; $i < $iterationsCount; $i++) {
+			if (strlen($strFunctionStack) > 0)
+				$strFunctionStack .= " < ";
+
+			if (isset($arBacktrace[$i]["class"]))
+				$strFunctionStack .= $arBacktrace[$i]["class"]."::";
+
+			$strFunctionStack .= $arBacktrace[$i]["function"];
+
+			if (isset($arBacktrace[$i]["file"]))
+				$strFilesStack .= "\t".$arBacktrace[$i]["file"].":".$arBacktrace[$i]["line"]."\n";
+			if ($bShowArgs && isset($arBacktrace[$i]["args"])){
+				$strFilesStack .= "\t\t";
+				if (isset($arBacktrace[$i]["class"]))
+					$strFilesStack .= $arBacktrace[$i]["class"]."::";
+				$strFilesStack .= $arBacktrace[$i]["function"];
+				$strFilesStack .= "(\n";
+				foreach ($arBacktrace[$i]["args"] as $value)
+					$strFilesStack .= "\t\t\t".$value."\n";
+				$strFilesStack .= "\t\t)\n";
+
+			}
+		}
+
+		if (strlen($strFunctionStack) > 0){
+			$file->putContents("    ".$strFunctionStack."\n".$strFilesStack, $file::APPEND);
+		}
+		$file->putContents("----------\n", $file::APPEND);
 	}
 }
