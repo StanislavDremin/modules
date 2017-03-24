@@ -53,8 +53,6 @@ abstract class AdminEditHelper extends AdminBaseHelper
 	 */
 	protected $tabControl;
 
-	public static $titlePage = '';
-
 	/**
 	 * Производится инициализация переменных, обработка запросов на редактирование
 	 *

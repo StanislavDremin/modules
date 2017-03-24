@@ -255,6 +255,8 @@ abstract class AdminBaseHelper
 	 */
 	static protected $sectionSuffix = 'Sections';
 
+	public static $titlePage = '';
+
 	/**
 	 * @param array $fields список используемых полей и виджетов для них
 	 * @param array $tabs список вкладок для детальной страницы
@@ -621,6 +623,7 @@ abstract class AdminBaseHelper
 	 */
 	public function setTitle($title)
 	{
+
 		$this->app->SetTitle($title);
 	}
 
