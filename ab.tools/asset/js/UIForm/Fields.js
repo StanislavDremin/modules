@@ -191,6 +191,7 @@ class String extends BaseField {
 
 		let fieldClass = this.getFieldClass();
 
+		console.info(this.props);
 		return (
 			<span className="field_form_wrap">
 				<input type={this.props.type}

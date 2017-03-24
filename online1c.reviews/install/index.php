@@ -62,51 +62,26 @@ Class online1c_reviews extends CModule
 
 	function InstallFiles($arParams = array())
 	{
-		$path = $this->GetPath()."/install/components";
+		$path = $this->GetPath()."/copy/components";
 
-		if (\Bitrix\Main\IO\Directory::isDirectoryExists($path)){
-			CopyDirFiles($path, $_SERVER["DOCUMENT_ROOT"]."/bitrix/components", true, true);
-		}
+		$dir = new Bitrix\Main\IO\Directory($path);
+		$dir->create();
+		CopyDirFiles($path, $_SERVER["DOCUMENT_ROOT"]."/local/components", true, true);
 
-		if (\Bitrix\Main\IO\Directory::isDirectoryExists($path = $this->GetPath().'/admin')){
-			CopyDirFiles($this->GetPath()."/install/admin/", $_SERVER["DOCUMENT_ROOT"]."/bitrix/admin"); //если есть файлы для копирования
-			if ($dir = opendir($path)){
-				while (false !== $item = readdir($dir)) {
-					if (in_array($item, $this->exclusionAdminFiles))
-						continue;
-					file_put_contents($_SERVER['DOCUMENT_ROOT'].'/bitrix/admin/'.$item,
-						'<'.'? require($_SERVER["DOCUMENT_ROOT"]."'.$this->GetPath(true).'/admin/'.$item.'");?'.'>');
-				}
-				closedir($dir);
-			}
-		}
-
-		if (\Bitrix\Main\IO\Directory::isDirectoryExists($path = $this->GetPath().'/install/files')){
-			$this->copyArbitraryFiles();
-		}
+//		if (\Bitrix\Main\IO\Directory::isDirectoryExists($path = $this->GetPath().'/install/files')){
+//			$this->copyArbitraryFiles();
+//		}
 
 		return true;
 	}
 
 	function UnInstallFiles()
 	{
-		\Bitrix\Main\IO\Directory::deleteDirectory($_SERVER["DOCUMENT_ROOT"].'/bitrix/components/'.$this->MODULE_ID.'/');
+		\Bitrix\Main\IO\Directory::deleteDirectory($_SERVER["DOCUMENT_ROOT"].'/local/components/online1c/');
 
-		if (\Bitrix\Main\IO\Directory::isDirectoryExists($path = $this->GetPath().'/admin')){
-			DeleteDirFiles($_SERVER["DOCUMENT_ROOT"].$this->GetPath().'/install/admin/', $_SERVER["DOCUMENT_ROOT"].'/bitrix/admin');
-			if ($dir = opendir($path)){
-				while (false !== $item = readdir($dir)) {
-					if (in_array($item, $this->exclusionAdminFiles))
-						continue;
-					\Bitrix\Main\IO\File::deleteFile($_SERVER['DOCUMENT_ROOT'].'/bitrix/admin/'.$this->MODULE_ID.'_'.$item);
-				}
-				closedir($dir);
-			}
-		}
-
-		if (\Bitrix\Main\IO\Directory::isDirectoryExists($path = $this->GetPath().'/install/files')){
-			$this->deleteArbitraryFiles();
-		}
+//		if (\Bitrix\Main\IO\Directory::isDirectoryExists($path = $this->GetPath().'/install/files')){
+//			$this->deleteArbitraryFiles();
+//		}
 
 		return true;
 	}
