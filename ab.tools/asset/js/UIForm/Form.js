@@ -7,7 +7,7 @@
 /** @var o $ */
 "use strict";
 import { RandString } from 'Tools';
-import options from './options';
+// import options from './options';
 
 class Form extends React.Component {
 	constructor(props) {

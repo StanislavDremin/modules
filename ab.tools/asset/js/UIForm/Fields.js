@@ -24,26 +24,26 @@ class BaseField extends React.Component {
 		this.change = this.change.bind(this);
 	}
 
-	setValue(data = {}){
+	setValue(data = {}) {
 		let newState = {
 			...this.state,
 			value: this.transform(data.value),
-			valid: data.validValue !== undefined ?  this.setValid(data.validValue) : this.setValid(data.value),
+			valid: data.validValue !== undefined ? this.setValid(data.validValue) : this.setValid(data.value),
 			dirty: true,
 			pristine: data.pristine !== undefined ? data.pristine : false,
 			name: data.name === undefined ? this.props.name : data.name,
 		};
 
-		if(newState.valid === false){
+		if (newState.valid === false) {
 			newState.error = true;
-			if(this.props.hasOwnProperty('errorMsg')){
+			if (this.props.hasOwnProperty('errorMsg')) {
 				newState.errorMsg = this.props.errorMsg;
 			}
 		} else {
 			newState.error = false;
 		}
 
-		if(newState.pristine === true){
+		if (newState.pristine === true) {
 			newState.valid = true;
 			newState.error = false;
 		}
@@ -60,9 +60,9 @@ class BaseField extends React.Component {
 		this.context.changeField(newState);
 	}
 
-	setValid(val){
-		if(this.props.hasOwnProperty('valid') && this.props.valid !== null && this.props.valid !== false){
-			if(val === undefined || val === null)
+	setValid(val) {
+		if (this.props.hasOwnProperty('valid') && this.props.valid !== null && this.props.valid !== false) {
+			if (val === undefined || val === null)
 				val = '';
 
 			return Validator.isValid(val, this.props.valid)
@@ -71,7 +71,7 @@ class BaseField extends React.Component {
 		return true;
 	}
 
-	subscribeForm(){
+	subscribeForm() {
 		let $field = $(ReactDOM.findDOMNode(this));
 		let $form = $field.closest('form');
 
@@ -80,19 +80,19 @@ class BaseField extends React.Component {
 		});
 	}
 
-	unSubscribeForm(){
+	unSubscribeForm() {
 		//todo сделать отписку событий от родительской формы
 		// let $field = $(ReactDOM.findDOMNode(this));
 		// let $form = $field.closest('form');
 		// $form.off('submit');
 	}
 
-	transform(val){
+	transform(val) {
 		let newVal = this.state.value;
 
-		if(this.props.hasOwnProperty('transform')){
+		if (this.props.hasOwnProperty('transform')) {
 			newVal = Tarnsformator.getTransformVal(val, this.props['transform']);
-			if(newVal !== false){
+			if (newVal !== false) {
 				return newVal;
 			}
 		}
@@ -113,7 +113,7 @@ class BaseField extends React.Component {
 
 	}
 
-	componentDidMount () {
+	componentDidMount() {
 		let state = {
 			name: this.props.name,
 			value: ''
@@ -128,14 +128,14 @@ class BaseField extends React.Component {
 		this.subscribeForm();
 	}
 
-	componentWillUnmount(){
+	componentWillUnmount() {
 		// todo сделать отписку событий от родительской формы
 	}
 
-	getFieldClass(){
+	getFieldClass() {
 		let fieldClass = '';
 
-		if(this.state.valid !== true)
+		if (this.state.valid !== true)
 			fieldClass = cn(this.props.className, 'control_error', this.props.errorClass);
 		else
 			fieldClass = this.props.className;
@@ -143,16 +143,16 @@ class BaseField extends React.Component {
 		return fieldClass;
 	}
 
-	getErrorMessage(){
-		if(this.state.error === true && this.props.hasOwnProperty('errorMsg')){
-			if(typeof this.props.errorMsg === 'string'){
+	getErrorMessage() {
+		if (this.state.error === true && this.props.hasOwnProperty('errorMsg')) {
+			if (typeof this.props.errorMsg === 'string') {
 				return (
 					<span className="error_field_wrap animated slideInUp">
 						{this.state.errorMsg}
 						<i className="fa fa-caret-down" />
 					</span>
 				);
-			} else if(React.isValidElement(this.props.errorMsg)){
+			} else if (React.isValidElement(this.props.errorMsg)) {
 				return this.props.errorMsg;
 			}
 
@@ -179,8 +179,8 @@ class String extends BaseField {
 		disabled: false
 	};
 
-	setValid(val){
-		if(this.props.hasOwnProperty('regExp')){
+	setValid(val) {
+		if (this.props.hasOwnProperty('regExp')) {
 			return Validator.regExp(val, this.props.regExp);
 		}
 
@@ -191,7 +191,6 @@ class String extends BaseField {
 
 		let fieldClass = this.getFieldClass();
 
-		console.info(this.props);
 		return (
 			<span className="field_form_wrap">
 				<input type={this.props.type}
@@ -199,12 +198,51 @@ class String extends BaseField {
 					name={this.props.name}
 					onChange={this.change}
 					className={fieldClass}
-					placeholder={this.props.placeholder} disabled={this.props.disabled}/>
+					placeholder={this.props.placeholder} disabled={this.props.disabled} />
 				{this.getErrorMessage()}
 			</span>
 		)
 	}
 }
+
+class Mask extends BaseField {
+
+	constructor(props) {
+		super(props);
+	}
+
+	transform(val) {
+		return val;
+	}
+
+	componentDidMount() {
+		super.componentDidMount();
+
+		let $node = $(ReactDOM.findDOMNode(this));
+		$node.find('.phone_mask').mask(this.props.mask);
+	}
+
+	render() {
+		let fieldClass = this.getFieldClass();
+		let className = cn(fieldClass, 'phone_mask');
+
+		return  (
+			<span className="field_form_wrap">
+				<input type={this.props.type}
+					value={this.state.value}
+					name={this.props.name}
+					onChange={this.change}
+					className={className}
+					placeholder={this.props.placeholder} disabled={this.props.disabled} />
+				{this.getErrorMessage()}
+			</span>
+		)
+	}
+}
+Mask.propTypes = {
+	name: React.PropTypes.string.isRequired,
+	mask: React.PropTypes.string.isRequired
+};
 
 class Select extends BaseField {
 	constructor(props) {
@@ -232,9 +270,9 @@ class Select extends BaseField {
 	// 	return true;
 	// }
 
-	setValue(data = {}, items = []){
+	setValue(data = {}, items = []) {
 
-		if(items.length === 0){
+		if (items.length === 0) {
 			items = this.compileItems();
 		}
 
@@ -242,20 +280,20 @@ class Select extends BaseField {
 			return el.id === data.value;
 		}).shift();
 
-		if(value === undefined)
+		if (value === undefined)
 			value = {id: null, label: null};
 
 		super.setValue({value, name: data.name, validValue: value.id});
 	}
 
-	change(ev){
+	change(ev) {
 		let {name, value} = ev.target;
 		this.setValue({name, value})
 	}
 
-	compileItems(){
+	compileItems() {
 		let stateItems = [];
-		if(this.props.items.length === 0){
+		if (this.props.items.length === 0) {
 			stateItems = React.Children.map(this.props.children, (el) => {
 				return {id: el.props.value, label: el.props.children};
 			});
@@ -273,7 +311,7 @@ class Select extends BaseField {
 		let items = this.compileItems();
 
 		if (this.props.hasOwnProperty('defaultValue')) {
-			if(this.props.defaultValue !== false)
+			if (this.props.defaultValue !== false)
 				this.setValue({value: this.props.defaultValue, name: this.props.name}, items);
 		}
 	}
@@ -290,21 +328,20 @@ class Select extends BaseField {
 		if (nextProps.hasOwnProperty('selected')
 			&& nextProps.hasOwnProperty('items')
 			&& nextProps.items.length > 0
-			&& !this.state.value.hasOwnProperty('id'))
-		{
+			&& !this.state.value.hasOwnProperty('id')) {
 			this.setValue({value: nextProps.selected, name: nextProps.name});
 		}
 
 	}
 
-	render(){
+	render() {
 		let options = [];
-		if(this.state.items.length > 0){
+		if (this.state.items.length > 0) {
 			options = this.state.items.map((el, i) => {
-				if(typeof el === 'object'){
+				if (typeof el === 'object') {
 					let selected = this.state.value.id === el.id ? 'selected' : false;
 					return <option selected={selected} key={this.props.name + el.id} value={el.id}>{el.label}</option>
-				} else if(typeof el === 'string'){
+				} else if (typeof el === 'string') {
 					let selected = this.state.value.id === i ? 'selected' : false;
 					return <option selected={selected} key={this.props.name + i} value={i}>{el}</option>
 				}
@@ -326,17 +363,17 @@ class Select extends BaseField {
 	}
 }
 
-class Checkbox extends BaseField{
-	constructor(props){
+class Checkbox extends BaseField {
+	constructor(props) {
 		super(props);
 	}
 
 	change(ev) {
 		let {value, name} = ev.target;
-		if(this.state.value === value){
-			if(typeof value === 'string'){
+		if (this.state.value === value) {
+			if (typeof value === 'string') {
 				value = false;
-			} else if(typeof value === 'number'){
+			} else if (typeof value === 'number') {
 				value = 0;
 			} else {
 				value = !this.state.value;
@@ -347,21 +384,21 @@ class Checkbox extends BaseField{
 		this.setValue({name, value});
 	}
 
-	componentDidMount () {
+	componentDidMount() {
 		if (this.props.hasOwnProperty('checked')) {
 			this.setValue({value: this.props.value, name: this.props.name});
 		}
 	}
 
-	render(){
+	render() {
 		let fieldClass = this.getFieldClass();
 		let checked = this.state.value === this.props.value ? 'checked' : false;
 
-		return(
+		return (
 			<span className="field_form_wrap">
 				<input type="checkbox" name={this.props.name}
 					className={fieldClass} id={this.props.id}
-					onChange={this.change} value={this.props.value} disabled={this.props.disabled} checked={checked}/>
+					onChange={this.change} value={this.props.value} disabled={this.props.disabled} checked={checked} />
 				{this.getErrorMessage()}
 			</span>
 		);
@@ -369,12 +406,12 @@ class Checkbox extends BaseField{
 }
 
 class RadioBox extends Checkbox {
-	constructor(props){
+	constructor(props) {
 		super(props);
 
 	}
 
-	render(){
+	render() {
 		let fieldClass = this.getFieldClass();
 		let checked = this.state.value === this.props.value ? 'checked' : false;
 
@@ -382,13 +419,13 @@ class RadioBox extends Checkbox {
 			<input type="radio" name={this.props.name}
 				className={fieldClass} id={this.props.id}
 				onChange={this.change} value={this.props.value}
-				disabled={this.props.disabled} checked={checked}/>
+				disabled={this.props.disabled} checked={checked} />
 		);
 	}
 }
 
 class Text extends BaseField {
-	constructor(props){
+	constructor(props) {
 		super(props);
 
 	}
@@ -401,19 +438,19 @@ class Text extends BaseField {
 		rows: 10
 	};
 
-	change(ev){
+	change(ev) {
 		super.change(ev);
 
-		if(ev.target.clientHeight < ev.target.scrollHeight){
+		if (ev.target.clientHeight < ev.target.scrollHeight) {
 			this.setState({height: ev.target.scrollHeight + 20});
 		}
 
 	}
 
-	render(){
+	render() {
 		let fieldClass = this.getFieldClass();
 		let styleHeight = {};
-		if(this.state.height !== undefined){
+		if (this.state.height !== undefined) {
 			styleHeight.height = this.state.height + 'px';
 		}
 		return (
@@ -423,11 +460,11 @@ class Text extends BaseField {
 					onChange={this.change}
 					className={fieldClass}
 					disabled={this.props.disabled}
-					cols={this.props.cols} rows={this.props.rows} placeholder={this.props.placeholder}/>
+					cols={this.props.cols} rows={this.props.rows} placeholder={this.props.placeholder} />
 				{this.getErrorMessage()}
 			</span>
 		)
 	}
 }
 
-export {String, Select, Checkbox, RadioBox, Text};
+export { String, Select, Checkbox, RadioBox, Text, Mask };
