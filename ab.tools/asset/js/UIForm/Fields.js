@@ -9,6 +9,7 @@
 import cn from 'classnames';
 import Validator from './Validators';
 import Tarnsformator from './Tarnsformator';
+import MaskedInput from 'react-maskedinput';
 
 class BaseField extends React.Component {
 	constructor(props) {
@@ -25,10 +26,12 @@ class BaseField extends React.Component {
 	}
 
 	setValue(data = {}) {
+		let validate =  data.validValue !== undefined ? this.setValid(data.validValue) : this.setValid(data.value);
+
 		let newState = {
 			...this.state,
 			value: this.transform(data.value),
-			valid: data.validValue !== undefined ? this.setValid(data.validValue) : this.setValid(data.value),
+			valid: validate,
 			dirty: true,
 			pristine: data.pristine !== undefined ? data.pristine : false,
 			name: data.name === undefined ? this.props.name : data.name,
@@ -48,6 +51,10 @@ class BaseField extends React.Component {
 			newState.error = false;
 		}
 
+		if(newState.pristine === true && validate === false){
+			newState.valid = false;
+		}
+
 		if (this.props.hasOwnProperty('index')) {
 			newState.index = this.props.index;
 		}
@@ -57,7 +64,9 @@ class BaseField extends React.Component {
 			this.props.onChange(newState);
 		}
 
-		this.context.changeField(newState);
+		if(is.function(this.context.changeField)){
+			this.context.changeField(newState);
+		}
 	}
 
 	setValid(val) {
@@ -107,6 +116,10 @@ class BaseField extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 
+		if (nextProps.hasOwnProperty('defaultValue') && nextProps.defaultValue !== this.props.defaultValue) {
+			this.setValue({value: nextProps.defaultValue, name: nextProps.name});
+		}
+
 		if (nextProps.hasOwnProperty('value') && nextProps.value !== this.props.value) {
 			this.setValue({value: nextProps.value, name: nextProps.name});
 		}
@@ -135,7 +148,7 @@ class BaseField extends React.Component {
 	getFieldClass() {
 		let fieldClass = '';
 
-		if (this.state.valid !== true)
+		if (this.state.valid !== true && !this.state.pristine)
 			fieldClass = cn(this.props.className, 'control_error', this.props.errorClass);
 		else
 			fieldClass = this.props.className;
@@ -198,7 +211,9 @@ class String extends BaseField {
 					name={this.props.name}
 					onChange={this.change}
 					className={fieldClass}
-					placeholder={this.props.placeholder} disabled={this.props.disabled} />
+					placeholder={this.props.placeholder}
+					disabled={this.props.disabled}
+					maxLength={this.props.maxlength}/>
 				{this.getErrorMessage()}
 			</span>
 		)
@@ -215,25 +230,21 @@ class Mask extends BaseField {
 		return val;
 	}
 
-	componentDidMount() {
-		super.componentDidMount();
-
-		let $node = $(ReactDOM.findDOMNode(this));
-		$node.find('.phone_mask').mask(this.props.mask);
-	}
-
 	render() {
 		let fieldClass = this.getFieldClass();
-		let className = cn(fieldClass, 'phone_mask');
+		let className = cn(fieldClass, 'data_mask');
 
 		return  (
 			<span className="field_form_wrap">
-				<input type={this.props.type}
-					value={this.state.value}
-					name={this.props.name}
-					onChange={this.change}
-					className={className}
-					placeholder={this.props.placeholder} disabled={this.props.disabled} />
+				 <MaskedInput
+					 mask={this.props.mask}
+					 name={this.props.name}
+					 placeholder={this.props.placeholder}
+					 onChange={this.change}
+					 className={className}
+					 defaultValue={this.props.defaultValue} disabled={this.props.disabled}
+					 maxLength={this.props.maxlength}
+				 />
 				{this.getErrorMessage()}
 			</span>
 		)
@@ -293,6 +304,7 @@ class Select extends BaseField {
 
 	compileItems() {
 		let stateItems = [];
+
 		if (this.props.items.length === 0) {
 			stateItems = React.Children.map(this.props.children, (el) => {
 				return {id: el.props.value, label: el.props.children};
@@ -336,18 +348,22 @@ class Select extends BaseField {
 
 	render() {
 		let options = [];
-		if (this.state.items.length > 0) {
-			options = this.state.items.map((el, i) => {
-				if (typeof el === 'object') {
-					let selected = this.state.value.id === el.id ? 'selected' : false;
-					return <option selected={selected} key={this.props.name + el.id} value={el.id}>{el.label}</option>
-				} else if (typeof el === 'string') {
-					let selected = this.state.value.id === i ? 'selected' : false;
-					return <option selected={selected} key={this.props.name + i} value={i}>{el}</option>
-				}
-			});
-		} else {
-			options = this.props.children;
+
+		if(this.state.items !== undefined){
+			if (this.state.items.length > 0) {
+				options = this.state.items.map((el, i) => {
+					if (typeof el === 'object') {
+						let selected = this.state.value.id === el.id ? 'selected' : false;
+						return <option selected={selected} key={this.props.name + el.id} value={el.id}>{el.label}</option>
+					} else if (typeof el === 'string') {
+						let selected = this.state.value.id === i ? 'selected' : false;
+						return <option selected={selected} key={this.props.name + i} value={i}>{el}</option>
+					}
+				});
+			} else {
+				options = this.props.children;
+			}
+
 		}
 
 		let fieldClass = this.getFieldClass();

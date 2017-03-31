@@ -39,7 +39,22 @@ class Form extends React.Component {
 		isClear: false
 	};
 
-	change(ev) {}
+	change(ev) {
+		ev.preventDefault();
+
+		let newState = {
+			...this.state,
+			submited: true
+		};
+
+		setTimeout(() => {
+			newState = Object.assign(newState, this.setValidateForm(this.state.fields));
+			if (this.props.hasOwnProperty('onChange')) {
+				this.props.onChange(newState);
+			}
+			this.setState(newState);
+		});
+	}
 
 	submit(ev) {
 		ev.preventDefault();
@@ -125,7 +140,8 @@ class Form extends React.Component {
 				className={this.props.className}
 				id={this.props.id}
 				name={this.props.name}
-				onSubmit={this.submit}>
+				onSubmit={this.submit}
+				onChange={this.change}>
 
 				{this.props.children}
 
