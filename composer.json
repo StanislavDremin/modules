@@ -23,5 +23,5 @@
     "php": ">=5.4.0",
     "composer/installers": "~1"
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "stable"
 }
