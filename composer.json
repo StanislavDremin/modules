@@ -1,5 +1,5 @@
 {
-  "name": "modules",
+  "name": "abraxabra.modules",
   "description": "API for modules tools",
   "type": "bitrix-module",
   "license": "MIT",
