@@ -483,4 +483,66 @@ class Text extends BaseField {
 	}
 }
 
-export { String, Select, Checkbox, RadioBox, Text, Mask };
+class DateTime extends BaseField {
+
+	constructor(props) {
+		super(props);
+
+
+		this.showCalendar = this.showCalendar.bind(this);
+	}
+
+	static defaultProps = {
+		periodFrom: false,
+		periodTo: false
+	};
+
+	showCalendar(ev) {
+		BX.calendar({node: ev.target, field: ev.target, bTime: false, callback: (date) => {
+			let options = {
+				year: 'numeric',
+				month: 'numeric',
+				day: 'numeric',
+			};
+			this.setValue({name:this.props.name, value: date.toLocaleString("ru", options)});
+		}});
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.hasOwnProperty('defaultValue') && nextProps.defaultValue !== this.props.defaultValue) {
+			this.setValue({value: nextProps.defaultValue, name: nextProps.name});
+		}
+	}
+
+	render() {
+		let fieldClass = this.getFieldClass(),
+			inputClass = cn(fieldClass, 'adm-input', {
+				'adm-calendar-from': this.props.periodFrom,
+				'adm-calendar-to': this.props.periodTo,
+			}),
+			wrapClass = cn('adm-input-wrap adm-calendar-inp', {
+				'adm-calendar-first': this.props.periodFrom,
+				'adm-calendar-second': this.props.periodTo,
+			});
+
+		return (
+			<span className={wrapClass}>
+				<input type={this.props.type}
+					value={this.state.value}
+					name={this.props.name}
+					onChange={this.change}
+					className={inputClass}
+					placeholder={this.props.placeholder}
+					disabled={this.props.disabled}
+					onBlur={this.blur}
+					onClick={this.showCalendar}
+					defaultValue={this.props.defaultValue}
+				/>
+				<span className="adm-calendar-icon" title="Нажмите для выбора даты" onClick={this.showCalendar} />
+				{this.getErrorMessage()}
+			</span>
+		);
+	}
+}
+
+export { String, Select, Checkbox, RadioBox, Text, Mask, DateTime};
