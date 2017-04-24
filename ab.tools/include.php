@@ -56,7 +56,9 @@ $asset = [
 		],
 	],
 	'mask' => ['js' => $path.'/js/jquery.mask.min.js'],
+	'coreABTools' => ['js' => $path.'/js/coreABTools.js']
 ];
 foreach ($asset as $name => $arItem) {
 	CJSCore::RegisterExt($name, $arItem);
 }
+CUtil::InitJSCore(['coreABTools']);
