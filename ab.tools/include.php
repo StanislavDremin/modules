@@ -56,9 +56,36 @@ $asset = [
 		],
 	],
 	'mask' => ['js' => $path.'/js/jquery.mask.min.js'],
-	'coreABTools' => ['js' => $path.'/js/coreABTools.js']
 ];
 foreach ($asset as $name => $arItem) {
 	CJSCore::RegisterExt($name, $arItem);
 }
-CUtil::InitJSCore(['coreABTools']);
+
+use Symfony\Component\VarDumper\VarDumper;
+if (!function_exists('dump')){
+	function dump($var, $show = false)
+	{
+		global $USER;
+		if(!is_object($USER))
+			$USER = new \CUser();
+
+		if($USER->IsAdmin() || $show){
+			$iteArgs = debug_backtrace();
+			$bt = $iteArgs[0];
+			$dRoot = $_SERVER["DOCUMENT_ROOT"];
+			$dRoot = str_replace("/", "\\", $dRoot);
+			$bt["file"] = str_replace($dRoot, "", $bt["file"]);
+			$dRoot = str_replace("\\", "/", $dRoot);
+			$bt["file"] = str_replace($dRoot, "", $bt["file"]);
+
+			?>
+			<div style='font-size:9pt; border: 1px solid #999'>
+				<div style='padding:3px 5px; background:#99CCFF; font-weight:bold;'>File: <?=$bt["file"]?> [<?=$bt["line"]?>]</div>
+				<? foreach (func_get_args() as $var) {
+					VarDumper::dump($var);
+				}?>
+			</div>
+			<?
+		}
+	}
+}
